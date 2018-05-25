@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="索引 Docker简介 基本概念 镜像 容器 仓库   Docker安装   使用Docker镜像 获取镜像 列出镜像 删除镜像 利用commit理解镜像构成 使用Dockerfile定制镜像    Docker简介基本概念  Docker包括三个基本概念，  镜像（Image） 容器（Container） 仓库（Repository）理解了这三个概念，就理解了Docker的整个生命周期。镜像操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker学习笔记">
+<meta property="og:url" content="https://wyb1992.github.io/2018/05/21/Docker学习笔记/index.html">
+<meta property="og:site_name" content="wyb&#39;s note">
+<meta property="og:description" content="索引 Docker简介 基本概念 镜像 容器 仓库   Docker安装   使用Docker镜像 获取镜像 列出镜像 删除镜像 利用commit理解镜像构成 使用Dockerfile定制镜像    Docker简介基本概念  Docker包括三个基本概念，  镜像（Image） 容器（Container） 仓库（Repository）理解了这三个概念，就理解了Docker的整个生命周期。镜像操作">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://wyb1992.github.io/images/docker/docker-1.jpg">
+<meta property="og:image" content="https://wyb1992.github.io/images/docker/docker-2.jpg">
+<meta property="og:image" content="https://wyb1992.github.io/images/docker/docker-3.jpg">
+<meta property="og:updated_time" content="2018-05-25T11:59:23.106Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker学习笔记">
+<meta name="twitter:description" content="索引 Docker简介 基本概念 镜像 容器 仓库   Docker安装   使用Docker镜像 获取镜像 列出镜像 删除镜像 利用commit理解镜像构成 使用Dockerfile定制镜像    Docker简介基本概念  Docker包括三个基本概念，  镜像（Image） 容器（Container） 仓库（Repository）理解了这三个概念，就理解了Docker的整个生命周期。镜像操作">
+<meta name="twitter:image" content="https://wyb1992.github.io/images/docker/docker-1.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Docker学习笔记</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/05/22/初探JWT/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/04/20/Go学习笔记/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://wyb1992.github.io/2018/05/21/Docker学习笔记/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&text=Docker学习笔记"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&title=Docker学习笔记"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&is_video=false&description=Docker学习笔记"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Docker学习笔记&body=Check out this article: https://wyb1992.github.io/2018/05/21/Docker学习笔记/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&title=Docker学习笔记"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&title=Docker学习笔记"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&title=Docker学习笔记"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&title=Docker学习笔记"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&name=Docker学习笔记&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#索引"><span class="toc-number">1.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker简介"><span class="toc-number">2.</span> <span class="toc-text">Docker简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本概念"><span class="toc-number">2.1.</span> <span class="toc-text">基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#镜像"><span class="toc-number">2.1.1.</span> <span class="toc-text">镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#容器"><span class="toc-number">2.1.2.</span> <span class="toc-text">容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#仓库"><span class="toc-number">2.1.3.</span> <span class="toc-text">仓库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker安装"><span class="toc-number">2.2.</span> <span class="toc-text">Docker安装</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用Docker镜像"><span class="toc-number">3.</span> <span class="toc-text">使用Docker镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#获取镜像"><span class="toc-number">3.1.</span> <span class="toc-text">获取镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#运行"><span class="toc-number">3.1.0.1.</span> <span class="toc-text">运行</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列出镜像"><span class="toc-number">3.2.</span> <span class="toc-text">列出镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#中间层镜像"><span class="toc-number">3.2.1.</span> <span class="toc-text">中间层镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列出部分镜像"><span class="toc-number">3.2.2.</span> <span class="toc-text">列出部分镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以特定格式显示"><span class="toc-number">3.2.3.</span> <span class="toc-text">以特定格式显示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除镜像"><span class="toc-number">3.3.</span> <span class="toc-text">删除镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#用ID、镜像名、摘要删除镜像"><span class="toc-number">3.3.1.</span> <span class="toc-text">用ID、镜像名、摘要删除镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Untagged和Deleted"><span class="toc-number">3.3.2.</span> <span class="toc-text">Untagged和Deleted</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用docker-image-ls命令来配合"><span class="toc-number">3.3.3.</span> <span class="toc-text">用docker image ls命令来配合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用commit理解镜像构成"><span class="toc-number">3.4.</span> <span class="toc-text">利用commit理解镜像构成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Dockerfile定制镜像"><span class="toc-number">3.5.</span> <span class="toc-text">使用Dockerfile定制镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FORM指定基础镜像"><span class="toc-number">3.5.1.</span> <span class="toc-text">FORM指定基础镜像</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RUN执行命令"><span class="toc-number">3.6.</span> <span class="toc-text">RUN执行命令</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Docker学习笔记
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">wyb's note</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-05-21T07:34:13.000Z" itemprop="datePublished">2018-05-21</time>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><ul>
+<li><a href="#Docker简介">Docker简介</a><ul>
+<li><a href="#基本概念">基本概念</a><ul>
+<li><a href="#镜像">镜像</a></li>
+<li><a href="#容器">容器</a></li>
+<li><a href="#仓库">仓库</a></li>
+</ul>
+</li>
+<li><a href="#Docker安装">Docker安装</a></li>
+</ul>
+</li>
+<li><a href="#使用Docker镜像">使用Docker镜像</a><ul>
+<li><a href="#获取镜像">获取镜像</a></li>
+<li><a href="#列出镜像">列出镜像</a></li>
+<li><a href="#删除镜像">删除镜像</a></li>
+<li><a href="#利用commit理解镜像构成">利用commit理解镜像构成</a></li>
+<li><a href="#使用Dockerfile定制镜像">使用Dockerfile定制镜像</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="Docker简介"><a href="#Docker简介" class="headerlink" title="Docker简介"></a>Docker简介</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>  Docker包括三个基本概念，</p>
+<ul>
+<li>镜像（<code>Image</code>）</li>
+<li>容器（<code>Container</code>）</li>
+<li>仓库（<code>Repository</code>）<br>理解了这三个概念，就理解了Docker的整个生命周期。<h3 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h3>操作系统分为内核和用户空间，对于Linux而言，内核启动后，会挂载root文件系统为其提供用户空间支持。而Docker镜像就相当于一个root文件系统。<br>Docker镜像是一个特殊的文件系统，除了提供容器运行时所欲要的程序、库、资源、配置等文件外，还包含了一些为运行时准备的配置参数（如匿名卷、环境变量、用户等）。镜像不包含任何动态数据，其内容在构建之后也不会被改变。<h3 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h3>镜像和容器的关系，就像是面向对象程序设计中的类和实例一样，镜像是静态的定义，容器是镜像运行时的尸体。容器可以被创建、启动、停止、删除、暂停等。<br>容器的实质是进程，但与直接在宿主执行的进程不同，容器进程运行于属于自己的独立的命名空间。因此容器可以拥有自己的root文件系统、自己的网络配置、自己的进程空间，甚至自己的用户ID空间。<h3 id="仓库"><a href="#仓库" class="headerlink" title="仓库"></a>仓库</h3>镜像构建完成后，可以很容易的在当前宿主机上运行。但是，如果需要在其他服务器上使用这个镜像，我们就需要一个集中的存储、分发镜像的服务。Docker Registry就是这样的服务。<br>一个<strong>Docker Registry</strong>中可以包含多个<strong>Repository</strong>，每个仓库可以包含多个标签<strong>Tag</strong>，每个标签对应一个镜像。</li>
+</ul>
+<h2 id="Docker安装"><a href="#Docker安装" class="headerlink" title="Docker安装"></a>Docker安装</h2><p>  本人在macOS下使用手动安装的方式，点击链接下载<a href="https://download.docker.com/mac/stable/Docker.dmg" target="_blank" rel="noopener">Stable</a>或<a href="https://download.docker.com/mac/edge/Docker.dmg" target="_blank" rel="noopener">Edge</a>版本的Docker for Mac。安装完成后，运行下面的命令，验证是否安装成功。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker --version</span><br><span class="line">  Docker version 18.05.0-ce-rc1, build 33f00ce</span><br></pre></td></tr></table></figure></p>
+<p>  由于众所周知的网络原因，建议配置国内镜像加速。在任务栏点击Docker的图标-&gt;Perferenes-&gt;Daemon-&gt;Registry mirrors，如图所示，填入<a href="http://hub-mirror.c.163.com" target="_blank" rel="noopener">网易的镜像</a>。设置成功后，可输入如下命令验证配置是否生效。</p>
+<p>  <img src="/images/docker/docker-1.jpg" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker info</span><br><span class="line">  Registry Mirrors:</span><br><span class="line">  http://hub-mirror.c.163.com/</span><br></pre></td></tr></table></figure>
+<h1 id="使用Docker镜像"><a href="#使用Docker镜像" class="headerlink" title="使用Docker镜像"></a>使用Docker镜像</h1><h2 id="获取镜像"><a href="#获取镜像" class="headerlink" title="获取镜像"></a>获取镜像</h2><p>  <a href="https://hub.docker.com/explore/" target="_blank" rel="noopener">Docker Hub</a>上有大量的高质量的镜像可用，我们来看下怎么获取这些镜像。<br>  从Docker镜像仓库获取镜像的命令是<code>docker pull</code>，其命令格式为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull [选项][Docker Registry 地址[:端口号]/]仓库名[:标签]</span><br></pre></td></tr></table></figure></p>
+<p>具体的选项可以通多<code>docker pull --help</code> 命令看到，下面解释下镜像名称格式。</p>
+<ul>
+<li>Docker镜像仓库地址：地址的格式一般是<code>&lt;域名/IP&gt;[:端口号]</code>，默认地址是Docker Hub。</li>
+<li>仓库名：仓库名是两段式名称，即<code>&lt;用户名&gt;/&lt;软件名&gt;</code>。对于Docker Hub，如果不给出用户名，则默认为<code>library</code>，也就是官方镜像。</li>
+</ul>
+<p>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ docker pull ubuntu:16.04</span><br><span class="line">16.04: Pulling from library/ubuntu</span><br><span class="line">297061f60c36: Pull complete </span><br><span class="line">e9ccef17b516: Pull complete </span><br><span class="line">dbc33716854d: Pull complete </span><br><span class="line">8fe36b178d25: Pull complete </span><br><span class="line">686596545a94: Pull complete </span><br><span class="line">Digest: sha256:147cb164c3a23807bd8013e4bcc4553a34af49fdfd2478ba5b98f2bac9c495e5</span><br><span class="line">Status: Downloaded newer image for ubuntu:16.04</span><br></pre></td></tr></table></figure></p>
+<p>上面的命令中没有给出Docker镜像仓库地址，因此将会从Docker Hub获取镜像。而镜像名称是<code>ubuntu:16.04</code>，因此将会获取去官方进项‘library/ubuntu’仓库中标签为<code>16.04</code>的镜像。</p>
+<h4 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h4><p>有了镜像后，我们就能以这个镜像为基础启动并运行一个容器。以上面的<code>ubuntu:16.04</code>为例，如果我们打算启动里面的bash并且运行交互式操作的话，可以执行下面的命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -it --rm \</span><br><span class="line">ubuntu:16.04 \</span><br><span class="line">bash</span><br><span class="line">root@25ca789d6341:/# cat /etc/os-release </span><br><span class="line">NAME=&quot;Ubuntu&quot;</span><br><span class="line">VERSION=&quot;16.04.4 LTS (Xenial Xerus)&quot;</span><br><span class="line">ID=ubuntu</span><br><span class="line">ID_LIKE=debian</span><br><span class="line">PRETTY_NAME=&quot;Ubuntu 16.04.4 LTS&quot;</span><br><span class="line">VERSION_ID=&quot;16.04&quot;</span><br><span class="line">HOME_URL=&quot;http://www.ubuntu.com/&quot;</span><br><span class="line">SUPPORT_URL=&quot;http://help.ubuntu.com/&quot;</span><br><span class="line">BUG_REPORT_URL=&quot;http://bugs.launchpad.net/ubuntu/&quot;</span><br><span class="line">VERSION_CODENAME=xenial</span><br><span class="line">UBUNTU_CODENAME=xenial</span><br></pre></td></tr></table></figure></p>
+<p><code>docker run</code>就是运行容器的命令，具体格式我们会在容器一节进行详细讲解，我们这里简单说明一下上面用到的参数。</p>
+<ul>
+<li><strong>it</strong>：这是两个参数，一个是<code>-i</code>交互式操作，一个是<code>-t</code>终端</li>
+<li><strong>rm</strong>：这个参数是说容器退出之后立即将其删除</li>
+<li><strong>ubuntu:16.04</strong>：这是指用<code>ubuntu:16.04</code>镜像作为基础来启动镜像</li>
+<li><strong>bash</strong>：放在镜像名后面的是命令，这里我们希望有个交互式的Shell，因此用的是<code>bash</code></li>
+</ul>
+<p>进入容器后，我们可以在Shell下操作，执行任何所需的命令。这里我们执行<code>cat /etc/os-release</code>，这是Linux查看当前系统版本的命令。最后我们通过<code>exit</code>退出这个容器。</p>
+<h2 id="列出镜像"><a href="#列出镜像" class="headerlink" title="列出镜像"></a>列出镜像</h2><p>使用<code>docker image ls</code>命令可以列出已经下载下来的镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker image ls</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">redis               3.2                 e97b1f10d81a        3 weeks ago         99.7MB</span><br><span class="line">nginx               latest              ae513a47849c        3 weeks ago         109MB</span><br><span class="line">mysql               latest              80bbf861367a        3 weeks ago         445MB</span><br><span class="line">httpd               latest              fb2f3851a971        3 weeks ago         178MB</span><br><span class="line">openjdk             8-jdk-alpine        224765a6bdbe        4 months ago        102MB</span><br><span class="line">ubuntu              15.10               9b9cb95443b5        22 months ago       137MB</span><br></pre></td></tr></table></figure></p>
+<p>列表包含了<code>仓库名</code>、<code>标签</code>、<code>镜像ID</code>、<code>创建时间</code>、以及<code>所占用的空间</code>。</p>
+<p>可以通过<code>docker system df</code>命令来查看镜像、容器、数据卷所占用的空间。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ docker system df</span><br><span class="line">TYPE                TOTAL               ACTIVE              SIZE                RECLAIMABLE</span><br><span class="line">Images              10                  4                   1.499GB             972.7MB (64%)</span><br><span class="line">Containers          5                   0                   300B                300B (100%)</span><br><span class="line">Local Volumes       3                   0                   0B                  0B</span><br><span class="line">Build Cache</span><br></pre></td></tr></table></figure></p>
+<h3 id="中间层镜像"><a href="#中间层镜像" class="headerlink" title="中间层镜像"></a>中间层镜像</h3><p>为了加速镜像构建、重复利用资源，Docker会利用中间层镜像。<code>docker image ls</code>命令只会列出顶层镜像，如果希望显示包括中间层镜像在内的所有镜像的话，需要加<code>-a</code>参数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ docker image ls -a</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">springboot/system   latest              d4c6d5085319        6 days ago          124MB</span><br><span class="line">&lt;none&gt;              &lt;none&gt;              c09c2bd1d8c1        6 days ago          124MB</span><br><span class="line">&lt;none&gt;              &lt;none&gt;              4a00a600ccf6        6 days ago          102MB</span><br><span class="line">runoob/ubuntu       v2                  bc3d34e8203a        2 weeks ago         137MB</span><br><span class="line">redis               3.2                 e97b1f10d81a        3 weeks ago         99.7MB</span><br><span class="line">nginx               latest              ae513a47849c        3 weeks ago         109MB</span><br><span class="line">mysql               latest              80bbf861367a        3 weeks ago         445MB</span><br><span class="line">httpd               latest              fb2f3851a971        3 weeks ago         178MB</span><br><span class="line">ubuntu              16.04               0b1edfbffd27        3 weeks ago         113MB</span><br><span class="line">openjdk             8-jdk-alpine        224765a6bdbe        4 months ago        102MB</span><br></pre></td></tr></table></figure></p>
+<p>我们可以看到许多无标签的镜像，这些镜像很多都是中间层镜像，是其他镜像所依赖的镜像。这些无标签镜像不应该删除，否则会导致上层镜像因为依赖丢失而出错。不过只要删除那些依赖它们的镜像后，这些依赖的中间层镜像也会被连带删除。</p>
+<h3 id="列出部分镜像"><a href="#列出部分镜像" class="headerlink" title="列出部分镜像"></a>列出部分镜像</h3><p>我们可以根据仓库名列出镜像，命令如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker image ls ubuntu</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">ubuntu              16.04               0b1edfbffd27        3 weeks ago         113MB</span><br><span class="line">ubuntu              15.10               9b9cb95443b5        22 months ago       137MB</span><br></pre></td></tr></table></figure></p>
+<p>列出特定的某个镜像，也就是说置顶仓库名和标签<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker image ls ubuntu:16.04</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">ubuntu              16.04               0b1edfbffd27        3 weeks ago         113MB</span><br></pre></td></tr></table></figure></p>
+<p>除此之外，<code>docker image ls</code>还支持强大的过滤器参数<code>--filter</code>，或者简写<code>-f</code>。比如我们希望看到<code>mysql:latest</code>之后建立的镜像，可以用下面的命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ docker image ls -f since=mysql:latest</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">springboot/system   latest              d4c6d5085319        6 days ago          124MB</span><br><span class="line">runoob/ubuntu       v2                  bc3d34e8203a        2 weeks ago         137MB</span><br><span class="line">redis               3.2                 e97b1f10d81a        3 weeks ago         99.7MB</span><br><span class="line">nginx               latest              ae513a47849c        3 weeks ago         109MB</span><br></pre></td></tr></table></figure></p>
+<h3 id="以特定格式显示"><a href="#以特定格式显示" class="headerlink" title="以特定格式显示"></a>以特定格式显示</h3><p>默认情况下，<code>docker image ls</code>会输出一个完整的表格，但是我们并有所有时候都会需要这些内容。比如我们删除虚悬镜像的时候，我们利用<code>docker image ls</code>把所有的虚悬镜像的ID列出来，然后才可以交给<code>docker image rm</code>命令作为参数来删除制定的这些镜像，这个时候就用到了<code>-q</code>参数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ docker image ls -q</span><br><span class="line">d4c6d5085319</span><br><span class="line">bc3d34e8203a</span><br><span class="line">e97b1f10d81a</span><br><span class="line">ae513a47849c</span><br><span class="line">80bbf861367a</span><br><span class="line">fb2f3851a971</span><br><span class="line">0b1edfbffd27</span><br><span class="line">224765a6bdbe</span><br><span class="line">9b9cb95443b5</span><br><span class="line">6fae60ef3446</span><br></pre></td></tr></table></figure></p>
+<p><code>-f</code>配个<code>-q</code>产生出指定范围的ID列表，然后送给另一个<code>docker</code>命令作为参数，从而针对这组实体成批的进行某种操作的做饭在docker命令行使用过程中非常常见，不仅仅是镜像，将来我们会在各个命令中看到这类搭配以完成强大的功能。<br>另外一些时候，我们可能只是对表格的结构不满意，希望自己组织列或者不希望有标题，这样方便其他程序解析结果等，这就用到了<a href="https://gohugo.io/templates/introduction/" target="_blank" rel="noopener">Go的模板语法</a><br>比如下面的命令会直接列出镜像结果，并且只包含镜像ID和仓库名<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ docker image ls --format &quot;&#123;&#123;.ID&#125;&#125;:&#123;&#123;.Repository&#125;&#125;&quot;</span><br><span class="line">d4c6d5085319:springboot/system</span><br><span class="line">bc3d34e8203a:runoob/ubuntu</span><br><span class="line">e97b1f10d81a:redis</span><br><span class="line">ae513a47849c:nginx</span><br><span class="line">80bbf861367a:mysql</span><br><span class="line">fb2f3851a971:httpd</span><br><span class="line">0b1edfbffd27:ubuntu</span><br><span class="line">224765a6bdbe:openjdk</span><br><span class="line">9b9cb95443b5:ubuntu</span><br></pre></td></tr></table></figure></p>
+<p>或者打算以表格等距显示，并且有标题行。和默认一样，不过自己定义列。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ docker image ls --format &quot;&#123;&#123;.ID&#125;&#125;:&#123;&#123;.Repository&#125;&#125;\t&#123;&#123;.Tag&#125;&#125;&quot;</span><br><span class="line">d4c6d5085319:springboot/system	latest</span><br><span class="line">bc3d34e8203a:runoob/ubuntu	v2</span><br><span class="line">e97b1f10d81a:redis	3.2</span><br><span class="line">ae513a47849c:nginx	latest</span><br><span class="line">80bbf861367a:mysql	latest</span><br><span class="line">fb2f3851a971:httpd	latest</span><br><span class="line">0b1edfbffd27:ubuntu	16.04</span><br><span class="line">224765a6bdbe:openjdk	8-jdk-alpine</span><br><span class="line">9b9cb95443b5:ubuntu	15.10</span><br><span class="line">6fae60ef3446:training/webapp	latest</span><br></pre></td></tr></table></figure></p>
+<h2 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h2><p>如果要删除本地的镜像，可以使用<code>docker image rm</code>命令，其格式为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker image rm [选项]&lt;镜像1&gt;[&lt;镜像2&gt;...]</span><br></pre></td></tr></table></figure></p>
+<h3 id="用ID、镜像名、摘要删除镜像"><a href="#用ID、镜像名、摘要删除镜像" class="headerlink" title="用ID、镜像名、摘要删除镜像"></a>用ID、镜像名、摘要删除镜像</h3><p>其中<code>&lt;镜像&gt;</code>可以是<code>镜像短ID</code>、<code>镜像长ID</code>、<code>镜像名</code>或者<code>镜像摘要</code>。<br>比如我们有如下一些镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ docker image ls</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">springboot/system   latest              d4c6d5085319        6 days ago          124MB</span><br><span class="line">runoob/ubuntu       v2                  bc3d34e8203a        2 weeks ago         137MB</span><br><span class="line">redis               3.2                 e97b1f10d81a        3 weeks ago         99.7MB</span><br><span class="line">nginx               latest              ae513a47849c        3 weeks ago         109MB</span><br><span class="line">mysql               latest              80bbf861367a        3 weeks ago         445MB</span><br><span class="line">httpd               latest              fb2f3851a971        3 weeks ago         178MB</span><br><span class="line">ubuntu              16.04               0b1edfbffd27        3 weeks ago         113MB</span><br><span class="line">openjdk             8-jdk-alpine        224765a6bdbe        4 months ago        102MB</span><br><span class="line">ubuntu              15.10               9b9cb95443b5        22 months ago       137MB</span><br><span class="line">training/webapp     latest              6fae60ef3446        3 years ago         349MB</span><br></pre></td></tr></table></figure></p>
+<p>如果我们要删除<code>redis:3.2</code>镜像，可以用<code>短ID</code>来删除镜像，一般取前三个字符以上，可以执行下面命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ docker image rm e97b</span><br><span class="line">U$ntagged: redis:3.2</span><br><span class="line">Untagged: redis@sha256:33dccfc7c95b31c09d6f7de824716e79c1624e7587ee08dd402442fece7be214</span><br><span class="line">Deleted: sha256:e97b1f10d81a1da230e6327f5d7a13b1e5b3716bb979cdd583c608ecae88adef</span><br><span class="line">Deleted: sha256:2ba10eb7ce40ff2fb8240b89efdfcaca65e766e322dd931811a70c089ce2524f</span><br><span class="line">Deleted: sha256:3ca88aa54c7634d16d8f6717aebdcef639cead694ced3c393b237117a5e1e30f</span><br><span class="line">Deleted: sha256:f115d9da9e55bc62cf359227dd64edc01911f7b1ed52afbffd7b00a2e6d5d102</span><br><span class="line">Deleted: sha256:ba4122a82d251fc6b432237079bbb0d645ef47049e800c1f9e56d61fc8e823cf</span><br><span class="line">Deleted: sha256:2425077af8e28faee2557ddabb85a00938d81d13cf8c41897958d07aaeaa39d2</span><br><span class="line">Deleted: sha256:ba291263b0854589e32a6fa7775c898d662ed835cd686ac9ac2d33dcefa91a39</span><br></pre></td></tr></table></figure></p>
+<p>我们也可以用<code>&lt;仓库名&gt;:&lt;标签&gt;</code>来删除镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ docker image rm springboot/system:latest</span><br><span class="line">Untagged: springboot/system:latest</span><br><span class="line">Deleted: sha256:d4c6d5085319876efefdc1fbe9990240a35d4e044b72367d4bc541e08025850d</span><br><span class="line">Deleted: sha256:c09c2bd1d8c11ee1a449c2c2f9959149822ea17b98513bca6337d0f72d688a2e</span><br><span class="line">Deleted: sha256:8a8d6542fde6017f06197c0edfb099391d2d3d36c82d3b8cf92656b03ba8d305</span><br><span class="line">Deleted: sha256:4a00a600ccf68543699f0c4b6d7682702f8df9697973c7cbcb0980d10c936809</span><br></pre></td></tr></table></figure></p>
+<h3 id="Untagged和Deleted"><a href="#Untagged和Deleted" class="headerlink" title="Untagged和Deleted"></a>Untagged和Deleted</h3><p>观察下上面这几行命令的运行输出的话，你会注意到删除行为分为两类。一类是<code>Untagged</code>，另一类是<code>Deleted</code>。之前我们介绍过，镜像的唯一标识是其ID和摘要，而一个镜像可以有多个标签的。因此当我们使用命令删除镜像的时候，实际上是在要求删除某个标签的镜像。首先需要做的事将满足我们要求的镜像标签都取消，这就是我们看到的<code>Untagged</code>的信息。因为一个镜像可以对应多个标签，因此当我们删除了所指定的标签后，可能还有别的标签指向了这个镜像。如果是这种情况，那么<code>Delete</code>行为就不会发生。所以并非所有的<code>docker rmi</code>都会产生删除镜像的行为，有可能仅仅是取消了某个标签而已。<br>当该镜像所以的标签都被取消了，该镜像很有可能会失去了存在的意义，因此会触发删除行为。镜像是多层存储结构，因此在删除的时候也是从上层向基础方向一次进行判断删除。<br>除了镜像依赖以外，还需要注意的是容器对镜像的依赖。如果有用这个镜像启动的容器存在（即使容器没有运行），那么同样不可以删除这个镜像。容器是以镜像为基础，再加一层容器存储层，组成这样的多层存储结构去运行。如果这些容器是不需要的，应该现将它们删除，然后再来删除镜像。</p>
+<h3 id="用docker-image-ls命令来配合"><a href="#用docker-image-ls命令来配合" class="headerlink" title="用docker image ls命令来配合"></a>用docker image ls命令来配合</h3><p>像其他可以承接多个实体的命令一样，可以使用<code>docker image ls -q</code>来配合使用<code>docker image rm</code>，这样可以成批的删除希望删除的镜像。比如我们需要删除所有仓库名为<code>redis</code>的镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker image rm $(docker image ls -q redis)</span><br></pre></td></tr></table></figure></p>
+<p>或者删除所有在<code>mysql:latest</code>之前的镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker image rm $(docker image ls -q -f before=mysql:latest)</span><br></pre></td></tr></table></figure></p>
+<h2 id="利用commit理解镜像构成"><a href="#利用commit理解镜像构成" class="headerlink" title="利用commit理解镜像构成"></a>利用commit理解镜像构成</h2><p>注意：<code>docker commit</code>命令除了学习之外，还有一些特殊的应用场合，比如发现被入侵后保存现场等。但是，不要是使用<code>docker commit</code>定制镜像，定制镜像应该使用<code>Dockerfile</code>来完成。后续会讲到定制镜像的内容。<br>镜像是容器的基础，每次执行<code>docker run</code>的时候都会指定哪个镜像作为容器运行的基础。在之前的例子中，我们所使用的都是来自于Docker Hub的镜像。直接使用这些镜像可以满足一定的需求，但是当无法满需求时，我们就需要定制这些镜像，接下来我们将讲解如何定制镜像。<br>回顾之前的内容，镜像是多层存储，每一层都是在前一层的基础上进行的修改；而容器同样也是多层存储，是在以镜像为基础层，在其基础上加一层作为容器运行时的存储层。<br>现在让我们以定制一个Web服务器为例子，来讲解镜像是如何构建的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run  --name  webserver  -d  -p  80:80  nginx</span><br></pre></td></tr></table></figure></p>
+<p>这条命令会用<code>nginx</code>镜像启动一个容器，命名为<code>webserver</code>，并且映射了90端口，这样我们就可以用浏览器访问这个<code>nginx</code>服务器。我们直接用浏览器访问<a href="http://localhost" target="_blank" rel="noopener">http://localhost</a>，可以看到默认的nginx欢迎页面。</p>
+<p>  <img src="/images/docker/docker-2.jpg" alt=""></p>
+<p>现在假设我们不喜欢这个欢迎页面，我们希望改成Hello,Docker的文字，我们可以使用<code>docker exec</code>命令进入这个容器，修改其内容。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker exec  -it  webserver  bash</span><br><span class="line">root@6b6b8692220d:/# ls  </span><br><span class="line">root@6b6b8692220d:/# echo &apos;&lt;h1&gt;Hello,Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</span><br><span class="line">root@6b6b8692220d:/# exit</span><br><span class="line">exit</span><br></pre></td></tr></table></figure></p>
+<p>我们以交互式终端方式进入了<code>webserver</code>容器，并且执行了<code>bash</code>命令，也就是获得一个可以操作的Shell。然后我们用<code>&lt;h1&gt;Hello,Docker!&lt;/h1&gt;</code>覆盖了<code>/usr/share/nginx/html/index.html</code>的内容。现在我们刷新浏览器，发现内容被改变了。</p>
+<p>  <img src="/images/docker/docker-3.jpg" alt=""></p>
+<p>我们修改了容器的文件，也就是动了容器的存储层，我们可以通过<code>docker diff</code>命令看到具体的改的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">**docker** diff  webserver</span><br><span class="line">C /root</span><br><span class="line">A /root/.bash_history</span><br><span class="line">C /run</span><br><span class="line">A /run/nginx.pid</span><br><span class="line">C /usr/share/nginx</span><br><span class="line">C /usr/share/nginx/html/index.html</span><br><span class="line">A /usr/share/nginx/index</span><br><span class="line">A /usr/share/nginx/index.html</span><br><span class="line">C /var/cache/nginx</span><br><span class="line">A /var/cache/nginx/client_temp</span><br><span class="line">A /var/cache/nginx/fastcgi_temp</span><br><span class="line">A /var/cache/nginx/proxy_temp</span><br><span class="line">A /var/cache/nginx/scgi_temp</span><br><span class="line">A /var/cache/nginx/uwsgi_temp</span><br></pre></td></tr></table></figure></p>
+<p>我们现在定制好了变化，我们希望能将其保存下来形成镜像。当我们运行一个容器的时候，我们做的任何文件修改都会被记录于容器存储层里。而Docker提供了一个<code>docker commit</code>命令，可以将容器的存储层保存下来成为镜像。换句话说，就是原有镜像的基础上，再叠加上容器的存储层，并构成新的镜像。以后我们运行这个新镜像的时候，就会有用原有容器最后的文件变化。</p>
+<p><code>docker commit</code>的语法格式为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit [选项] &lt;容器ID或容器名&gt; [&lt;仓库名&gt;[:&lt;标签&gt;]]</span><br></pre></td></tr></table></figure></p>
+<p>我们可以用下面的命令将容器保存为镜像：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ docker commit \</span><br><span class="line">  --author  &quot;wyb&lt;wyb496926024@gmail.com&gt;&quot; \</span><br><span class="line">  --message  &quot;修改了默认网页&quot; \</span><br><span class="line">  webserver \</span><br><span class="line">  nginx:v2</span><br><span class="line">sha256:39b0a01f559ac0970df2d35aba7e6bbc683630bcf458ff86a7d75750637243ee</span><br></pre></td></tr></table></figure></p>
+<p>其中<code>--author</code>是指定修改的作者，而<code>--message</code>则是记录本次修改的内容。这个点和<code>git</code>版本控制相似，不过这里这些信息可以省略为空。<br>我们可以用<code>docker image ls</code>命令查看这个新定制的镜像：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker image  ls  nginx</span><br><span class="line">REPOSITORY TAG  IMAGE ID CREATED  SIZE</span><br><span class="line">nginx  v2 39b0a01f559a 3 minutes ago  109MB</span><br></pre></td></tr></table></figure></p>
+<p>我们还可以用<code>docker history</code>具体查看镜像内的历史记录，如果比较<code>nginx:v2</code>的历史记录，我们会发现新增了我们刚刚提交的这一层。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ docker history nginx:v2</span><br><span class="line">IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT</span><br><span class="line">39b0a01f559a        13 minutes ago      nginx -g daemon off;                            465B                修改了默认网页</span><br><span class="line">ae513a47849c        3 weeks ago         /bin/sh -c #(nop)  CMD [&quot;nginx&quot; &quot;-g&quot; &quot;daemon…   0B                  </span><br><span class="line">&lt;missing&gt;           3 weeks ago         /bin/sh -c #(nop)  STOPSIGNAL [SIGTERM]         0B                  </span><br><span class="line">&lt;missing&gt;           3 weeks ago         /bin/sh -c #(nop)  EXPOSE 80/tcp                0B                  </span><br><span class="line">&lt;missing&gt;           3 weeks ago         /bin/sh -c ln -sf /dev/stdout /var/log/nginx…   22B                 </span><br><span class="line">&lt;missing&gt;           3 weeks ago         /bin/sh -c set -x  &amp;&amp; apt-get update  &amp;&amp; apt…   53.7MB              </span><br><span class="line">&lt;missing&gt;           3 weeks ago         /bin/sh -c #(nop)  ENV NJS_VERSION=1.13.12.0…   0B                  </span><br><span class="line">&lt;missing&gt;           3 weeks ago         /bin/sh -c #(nop)  ENV NGINX_VERSION=1.13.12…   0B                  </span><br><span class="line">&lt;missing&gt;           3 weeks ago         /bin/sh -c #(nop)  LABEL maintainer=NGINX Do…   0B                  </span><br><span class="line">&lt;missing&gt;           3 weeks ago         /bin/sh -c #(nop)  CMD [&quot;bash&quot;]                 0B                  </span><br><span class="line">&lt;missing&gt;           3 weeks ago         /bin/sh -c #(nop) ADD file:ec5be7eec56a74975…   55.3MB</span><br></pre></td></tr></table></figure></p>
+<p>新的镜像定制好后，我们可以来运行这个镜像。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name web2 -d -p 81:80 nginx:v2</span><br></pre></td></tr></table></figure></p>
+<p>这里我们命名为新的服务为<code>web2</code>，并且映射到<code>81</code>端口。我们使用浏览器直接访问<a href="http://localhost:81/" target="_blank" rel="noopener">http://localhost:81/</a>看到结果，其内容应该和之前修改后的<code>webserver</code>一样。<br>至此，我们第一次完成了定制镜像，使用的是<code>docker commit</code>命令，手动操作给的旧的镜像添加了新的一层，形成了新的镜像，对镜像多层存储应该有了更直观的感觉。</p>
+<h2 id="使用Dockerfile定制镜像"><a href="#使用Dockerfile定制镜像" class="headerlink" title="使用Dockerfile定制镜像"></a>使用Dockerfile定制镜像</h2><p>在<code>docker commit</code>的学习中，我们了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以吧每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题都会解决，这个脚本就是Dockerfile。<br>Dockerfile是一个文本文件，其内包含了一条条的指令<strong>(Instruction)</strong>，每一条指令构建一层，因此每一条指令的内容，就是描述该层应当如何构建。<br>还以之前定制<code>nginx</code>镜像为例，这次我们使用Dockerfile来定制。在一个空白目录中，建立一个文本文件，并命名为<code>Dockerfile</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir docker</span><br><span class="line">$ touch Dockerfile</span><br></pre></td></tr></table></figure></p>
+<p>其内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FROM nginx</span><br><span class="line">RUN echo &apos;&lt;h1&gt;Hello,Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</span><br></pre></td></tr></table></figure></p>
+<p>这个Dockerfile很简单，一共就两行，涉及到了<code>FROM</code>和<code>RUN</code>两条指令。</p>
+<h3 id="FORM指定基础镜像"><a href="#FORM指定基础镜像" class="headerlink" title="FORM指定基础镜像"></a>FORM指定基础镜像</h3><p>所谓定制镜像，是以一个镜像为基础，在其上进行定制。就像我们之前运行了一个修改过的<code>nginx</code>镜像的容器一样，基础镜像必须是指定的。而<code>FROM</code>就是指定基础镜像，因此一个<code>Dockerfile</code>中<code>FROM</code>是必备的指令，并且必须是第一条指令。<br>在<strong>Docker Store</strong>上有非常多的高质量的官方镜像，有的可以直接拿来使用的服务类镜像，如<strong>nginx</strong>、<strong>redis</strong>、<strong>mongo</strong>、<strong>mysql</strong>、<strong>httpd</strong>、<strong>php</strong>、<strong>tomcat</strong>等，也有一些方便开发、构建、运行各种语言应用的镜像，如<strong>node</strong>、<strong>openjdk</strong>、<strong>python</strong>、<strong>ruby</strong>、<strong>golang</strong>等。可以在其中选择最符合我们需求的镜像当做基础镜像进行定制。<br>如果没有找到对应服务的镜像，官方镜像中还提供了一些更为基础的操作系统镜像。如<strong>ubuntu</strong>、<strong>debian</strong>、<strong>centos</strong>、<strong>fedora</strong>、<strong>alpine</strong>等，这些操作系统的软件库为我们提供了更广阔的空间。<br>除了选择现有镜像为基础镜像外，Docker还存在一个特殊的镜像，名为<code>scratch</code>。这个镜像是虚拟的概念，并没有实际存在，它表示一个空白的镜像。</p>
+<h2 id="RUN执行命令"><a href="#RUN执行命令" class="headerlink" title="RUN执行命令"></a>RUN执行命令</h2><p><code>RUN</code>指令是用来执行命令行命令的，由于命令行的强大能力，<code>RUN</code>指令在定制镜像时是最常用的指令之一，其格式有两种：</p>
+<ul>
+<li><p><em>shell格式</em>：<code>RUN &lt;命令&gt;</code>，就像直接在命令行中输入的命令一样。刚才在写的Dockerfile中的<code>RUN</code>指令就是这种格式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RUN echo &apos;&lt;h1&gt;Hello,Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><em>exec格式</em>：<code>RUN [&quot;可执行文件&quot;,&quot;参数1&quot;,&quot;参数2&quot;]</code>，这更像是函数调用中的格式。<br>既然<code>RUN</code>就像shell脚本一样可以执行命令，那我们是否可以向shell脚本一样把每个命令对应一个RUN呢？比如这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FROM debian:jessie</span><br><span class="line">RUN apt-get update</span><br><span class="line">RUN apt-get install -y gcc libc6-dev make</span><br><span class="line">RUN wget -o redis.tat.gz &quot;http://downlaod.redis.io/releases/redis-3.2.5.tar.gz&quot;</span><br><span class="line">RUN mkdir -p /usr/src/redis</span><br><span class="line">RUN tar - xzf redis.tart.gz -C /usr/src/redis --strip-compinents=1</span><br><span class="line">RUN make -C /usr/src/redis</span><br><span class="line">RUN make -C /usr/src/redis install</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>之前说过，Dockerfile中每个指令都会简历一层，<code>RUN</code>也不例外。每一个<code>RUN</code>的行为，都和刚才我们手工建立镜像的过程一样。新建立一层，在其上执行这些命令，执行结束后，<code>commit</code>这一层的修改，构成新的镜像。<br>而上面的这种写法，创建了7层镜像。这是没有必要的，而且很多运行时不需要的东西都被装进了镜像里，比如编译环境、更新的软件包等。结果就是产生非常臃肿、非常多层的镜像，这样不仅增加了构建部署的时间，也很容易出错。上面的<code>Dockerfile</code>的正确写法应该是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">FROM debian:jessie</span><br><span class="line"></span><br><span class="line">RUN buildDeps=&apos;gcc libc6-dev make&apos; \</span><br><span class="line">		&amp;&amp; apt-get update \</span><br><span class="line">		&amp;&amp; apt-get install -y $buildDeps \</span><br><span class="line">		&amp;&amp; wget -o redis.tat.gz &quot;http://downlaod.redis.io/releases/redis-3.2.5.tar.gz&quot; \</span><br><span class="line">		&amp;&amp; mkdir -p /usr/src/redis \</span><br><span class="line">		&amp;&amp; tar - xzf redis.tart.gz -C /usr/src/redis --strip-compinents=1 \</span><br><span class="line">		&amp;&amp; make -C /usr/src/redis \</span><br><span class="line">		&amp;&amp; make -C /usr/src/redis install \</span><br><span class="line">		&amp;&amp; rm -rf /var/lib/apt/lists/* \</span><br><span class="line">		&amp;&amp; rm redis.tar.gz \</span><br><span class="line">		&amp;&amp; rm -r /usr/src/redis \</span><br><span class="line">		&amp;&amp; apt-get purge -y --auto-remove $buildDeps</span><br></pre></td></tr></table></figure></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#索引"><span class="toc-number">1.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker简介"><span class="toc-number">2.</span> <span class="toc-text">Docker简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本概念"><span class="toc-number">2.1.</span> <span class="toc-text">基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#镜像"><span class="toc-number">2.1.1.</span> <span class="toc-text">镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#容器"><span class="toc-number">2.1.2.</span> <span class="toc-text">容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#仓库"><span class="toc-number">2.1.3.</span> <span class="toc-text">仓库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker安装"><span class="toc-number">2.2.</span> <span class="toc-text">Docker安装</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用Docker镜像"><span class="toc-number">3.</span> <span class="toc-text">使用Docker镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#获取镜像"><span class="toc-number">3.1.</span> <span class="toc-text">获取镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#运行"><span class="toc-number">3.1.0.1.</span> <span class="toc-text">运行</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列出镜像"><span class="toc-number">3.2.</span> <span class="toc-text">列出镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#中间层镜像"><span class="toc-number">3.2.1.</span> <span class="toc-text">中间层镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列出部分镜像"><span class="toc-number">3.2.2.</span> <span class="toc-text">列出部分镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以特定格式显示"><span class="toc-number">3.2.3.</span> <span class="toc-text">以特定格式显示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除镜像"><span class="toc-number">3.3.</span> <span class="toc-text">删除镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#用ID、镜像名、摘要删除镜像"><span class="toc-number">3.3.1.</span> <span class="toc-text">用ID、镜像名、摘要删除镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Untagged和Deleted"><span class="toc-number">3.3.2.</span> <span class="toc-text">Untagged和Deleted</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用docker-image-ls命令来配合"><span class="toc-number">3.3.3.</span> <span class="toc-text">用docker image ls命令来配合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用commit理解镜像构成"><span class="toc-number">3.4.</span> <span class="toc-text">利用commit理解镜像构成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Dockerfile定制镜像"><span class="toc-number">3.5.</span> <span class="toc-text">使用Dockerfile定制镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FORM指定基础镜像"><span class="toc-number">3.5.1.</span> <span class="toc-text">FORM指定基础镜像</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RUN执行命令"><span class="toc-number">3.6.</span> <span class="toc-text">RUN执行命令</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://wyb1992.github.io/2018/05/21/Docker学习笔记/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&text=Docker学习笔记"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&title=Docker学习笔记"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&is_video=false&description=Docker学习笔记"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Docker学习笔记&body=Check out this article: https://wyb1992.github.io/2018/05/21/Docker学习笔记/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&title=Docker学习笔记"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&title=Docker学习笔记"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&title=Docker学习笔记"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&title=Docker学习笔记"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://wyb1992.github.io/2018/05/21/Docker学习笔记/&name=Docker学习笔记&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 wyb
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
