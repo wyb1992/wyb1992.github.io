@@ -6,18 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="索引 Go语言环境安装  Go语言环境安装Mac OS安装Mac下通过brew安装1brew install go">
+    <meta name="description" content="索引 Go语言环境安装 Go语言结构  注意：本文所示demo均可在Github的go-learning中找到 Go语言环境安装本人在mac OS下通过brew安装 123brew install go或者brew install golang 安装成功后通过go version命令查看版本信息12$ go versiongo version go1.10.2 darwin/amd64 Go语言结">
 <meta name="keywords" content="后端技术,Go">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go学习笔记">
 <meta property="og:url" content="https://wyb1992.github.io/2018/04/20/Go学习笔记/index.html">
 <meta property="og:site_name" content="wyb&#39;s blogs">
-<meta property="og:description" content="索引 Go语言环境安装  Go语言环境安装Mac OS安装Mac下通过brew安装1brew install go">
+<meta property="og:description" content="索引 Go语言环境安装 Go语言结构  注意：本文所示demo均可在Github的go-learning中找到 Go语言环境安装本人在mac OS下通过brew安装 123brew install go或者brew install golang 安装成功后通过go version命令查看版本信息12$ go versiongo version go1.10.2 darwin/amd64 Go语言结">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-27T13:24:12.337Z">
+<meta property="og:updated_time" content="2018-05-29T13:34:03.307Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Go学习笔记">
-<meta name="twitter:description" content="索引 Go语言环境安装  Go语言环境安装Mac OS安装Mac下通过brew安装1brew install go">
+<meta name="twitter:description" content="索引 Go语言环境安装 Go语言结构  注意：本文所示demo均可在Github的go-learning中找到 Go语言环境安装本人在mac OS下通过brew安装 123brew install go或者brew install golang 安装成功后通过go version命令查看版本信息12$ go versiongo version go1.10.2 darwin/amd64 Go语言结">
     
     
         
@@ -101,7 +101,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#索引"><span class="toc-number">1.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言环境安装"><span class="toc-number">2.</span> <span class="toc-text">Go语言环境安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mac-OS安装"><span class="toc-number">2.1.</span> <span class="toc-text">Mac OS安装</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#索引"><span class="toc-number">1.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言环境安装"><span class="toc-number">2.</span> <span class="toc-text">Go语言环境安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言结构"><span class="toc-number">3.</span> <span class="toc-text">Go语言结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hello-Go实例"><span class="toc-number">3.1.</span> <span class="toc-text">Hello Go实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行Go程序"><span class="toc-number">3.2.</span> <span class="toc-text">执行Go程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言基础语法"><span class="toc-number">4.</span> <span class="toc-text">Go语言基础语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Go标记"><span class="toc-number">4.1.</span> <span class="toc-text">Go标记</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -142,9 +142,36 @@
   <div class="content" itemprop="articleBody">
     <h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><ul>
 <li><a href="#Go语言环境安装">Go语言环境安装</a></li>
+<li><a href="#Go语言结构">Go语言结构</a></li>
 </ul>
-<h2 id="Go语言环境安装"><a href="#Go语言环境安装" class="headerlink" title="Go语言环境安装"></a>Go语言环境安装</h2><h3 id="Mac-OS安装"><a href="#Mac-OS安装" class="headerlink" title="Mac OS安装"></a>Mac OS安装</h3><p>Mac下通过brew安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install go</span><br></pre></td></tr></table></figure></p>
-
+<p><strong>注意</strong>：本文所示demo均可在Github的<a href="https://github.com/wyb1992/go-learning" target="_blank" rel="noopener">go-learning</a>中找到</p>
+<h2 id="Go语言环境安装"><a href="#Go语言环境安装" class="headerlink" title="Go语言环境安装"></a>Go语言环境安装</h2><p>本人在mac OS下通过brew安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">brew install go</span><br><span class="line">或者</span><br><span class="line">brew install golang</span><br></pre></td></tr></table></figure>
+<p>安装成功后通过<code>go version</code>命令查看版本信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ go version</span><br><span class="line">go version go1.10.2 darwin/amd64</span><br></pre></td></tr></table></figure></p>
+<h2 id="Go语言结构"><a href="#Go语言结构" class="headerlink" title="Go语言结构"></a>Go语言结构</h2><h3 id="Hello-Go实例"><a href="#Hello-Go实例" class="headerlink" title="Hello Go实例"></a>Hello Go实例</h3><p>Go语言的基础组成有一下几个部分：</p>
+<ul>
+<li>包声明</li>
+<li>引入包</li>
+<li>函数</li>
+<li>变量</li>
+<li>语句 &amp; 表达式</li>
+<li>注释<br>接下来让我们写一个简单的代码，在项目的demo-文件夹中。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line">import  &quot;fmt&quot;</span><br><span class="line">func main() &#123;</span><br><span class="line">  fmt.Println(&quot;Hello,Go!&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>我们看下以上程序的各个部分：</p>
+<ol>
+<li>第一行代码 <em>package main</em> 定义了包名。你必须在源文件中非注释的第一行指明这个文件属于哪个包，如：package main。package main表示一个可独立执行的程序，每个 Go 应用程序都包含一个名为 main 的包。</li>
+<li>下一行 <em>import “fmt”</em> 告诉 Go 编译器这个程序需要使用 fmt 包（的函数，或其他元素），fmt 包实现了格式化 IO（输入/输出）的函数。</li>
+<li>下一行 <em>func main()</em> 是程序开始执行的函数。main 函数是每一个可执行程序所必须包含的，一般来说都是在启动后第一个执行的函数（如果有 init() 函数则会先执行该函数）。</li>
+<li>下一行 /<em>…</em>/ 是注释，在程序执行时将被忽略。单行注释是最常见的注释形式，你可以在任何地方使用以 // 开头的单行注释。多行注释也叫块注释，均已以 /<em> 开头，并以 </em>/ 结尾，且不可以嵌套使用，多行注释一般用于包的文档描述或注释成块的代码片段。</li>
+<li>下一行 <em>fmt.Println(…)</em> 可以将字符串输出到控制台，并在最后自动增加换行字符 \n。</li>
+<li>当标识符（包括常量、变量、类型、函数名、结构字段等等）以一个大写字母开头，如：Group1，那么使用这种形式的标识符的对象就可以被外部包的代码所使用（客户端程序需要先导入这个包），这被称为导出（像面向对象语言中的 public）；标识符如果以小写字母开头，则对包外是不可见的，但是他们在整个包的内部是可见并且可用的（像面向对象语言中的 protected ）。<h3 id="执行Go程序"><a href="#执行Go程序" class="headerlink" title="执行Go程序"></a>执行Go程序</h3></li>
+<li>打开记事本，复制以上代码，并保存为hello.go。</li>
+<li>打开命令号，进入到文件的根目录，输入<code>go run hello.go</code>并回车执行代码。</li>
+<li>如果操作正确将看到下面的输出字样<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ go run hello.go </span><br><span class="line">Hello,Go!</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="Go语言基础语法"><a href="#Go语言基础语法" class="headerlink" title="Go语言基础语法"></a>Go语言基础语法</h2><h3 id="Go标记"><a href="#Go标记" class="headerlink" title="Go标记"></a>Go标记</h3>
   </div>
 </article>
 
@@ -170,7 +197,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#索引"><span class="toc-number">1.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言环境安装"><span class="toc-number">2.</span> <span class="toc-text">Go语言环境安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mac-OS安装"><span class="toc-number">2.1.</span> <span class="toc-text">Mac OS安装</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#索引"><span class="toc-number">1.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言环境安装"><span class="toc-number">2.</span> <span class="toc-text">Go语言环境安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言结构"><span class="toc-number">3.</span> <span class="toc-text">Go语言结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hello-Go实例"><span class="toc-number">3.1.</span> <span class="toc-text">Hello Go实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行Go程序"><span class="toc-number">3.2.</span> <span class="toc-text">执行Go程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言基础语法"><span class="toc-number">4.</span> <span class="toc-text">Go语言基础语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Go标记"><span class="toc-number">4.1.</span> <span class="toc-text">Go标记</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
