@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="wyb&#39;s blogs">
 <meta property="og:description" content="索引 Go语言环境安装 Go语言结构  注意：本文所示demo均可在Github的go-learning中找到 Go语言环境安装本人在mac OS下通过brew安装 123brew install go或者brew install golang 安装成功后通过go version命令查看版本信息12$ go versiongo version go1.10.2 darwin/amd64 Go语言结">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-29T13:34:03.307Z">
+<meta property="og:updated_time" content="2018-05-30T14:20:17.023Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Go学习笔记">
 <meta name="twitter:description" content="索引 Go语言环境安装 Go语言结构  注意：本文所示demo均可在Github的go-learning中找到 Go语言环境安装本人在mac OS下通过brew安装 123brew install go或者brew install golang 安装成功后通过go version命令查看版本信息12$ go versiongo version go1.10.2 darwin/amd64 Go语言结">
@@ -101,7 +101,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#索引"><span class="toc-number">1.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言环境安装"><span class="toc-number">2.</span> <span class="toc-text">Go语言环境安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言结构"><span class="toc-number">3.</span> <span class="toc-text">Go语言结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hello-Go实例"><span class="toc-number">3.1.</span> <span class="toc-text">Hello Go实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行Go程序"><span class="toc-number">3.2.</span> <span class="toc-text">执行Go程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言基础语法"><span class="toc-number">4.</span> <span class="toc-text">Go语言基础语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Go标记"><span class="toc-number">4.1.</span> <span class="toc-text">Go标记</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#索引"><span class="toc-number">1.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言环境安装"><span class="toc-number">2.</span> <span class="toc-text">Go语言环境安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言结构"><span class="toc-number">3.</span> <span class="toc-text">Go语言结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hello-Go实例"><span class="toc-number">3.1.</span> <span class="toc-text">Hello Go实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行Go程序"><span class="toc-number">3.2.</span> <span class="toc-text">执行Go程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言基础语法"><span class="toc-number">4.</span> <span class="toc-text">Go语言基础语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Go标记"><span class="toc-number">4.1.</span> <span class="toc-text">Go标记</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#行分隔符"><span class="toc-number">4.2.</span> <span class="toc-text">行分隔符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注释"><span class="toc-number">4.3.</span> <span class="toc-text">注释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标识符"><span class="toc-number">4.4.</span> <span class="toc-text">标识符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关键字"><span class="toc-number">4.5.</span> <span class="toc-text">关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Go语言的空格"><span class="toc-number">4.6.</span> <span class="toc-text">Go语言的空格</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言数据类型"><span class="toc-number">5.</span> <span class="toc-text">Go语言数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数字类型"><span class="toc-number">5.1.</span> <span class="toc-text">数字类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他数字类型"><span class="toc-number">5.2.</span> <span class="toc-text">其他数字类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言变量"><span class="toc-number">6.</span> <span class="toc-text">Go语言变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量声明"><span class="toc-number">6.1.</span> <span class="toc-text">变量声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多变量声明"><span class="toc-number">6.2.</span> <span class="toc-text">多变量声明</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -155,7 +155,7 @@
 <li>函数</li>
 <li>变量</li>
 <li>语句 &amp; 表达式</li>
-<li>注释<br>接下来让我们写一个简单的代码，在项目的demo-文件夹中。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line">import  &quot;fmt&quot;</span><br><span class="line">func main() &#123;</span><br><span class="line">  fmt.Println(&quot;Hello,Go!&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li>注释<br>接下来让我们写一个简单的代码，在项目的demo-1文件夹中。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line">import  &quot;fmt&quot;</span><br><span class="line">func main() &#123;</span><br><span class="line">  fmt.Println(&quot;Hello,Go!&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>我们看下以上程序的各个部分：</p>
@@ -171,7 +171,269 @@
 <li>如果操作正确将看到下面的输出字样<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ go run hello.go </span><br><span class="line">Hello,Go!</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="Go语言基础语法"><a href="#Go语言基础语法" class="headerlink" title="Go语言基础语法"></a>Go语言基础语法</h2><h3 id="Go标记"><a href="#Go标记" class="headerlink" title="Go标记"></a>Go标记</h3>
+<h2 id="Go语言基础语法"><a href="#Go语言基础语法" class="headerlink" title="Go语言基础语法"></a>Go语言基础语法</h2><h3 id="Go标记"><a href="#Go标记" class="headerlink" title="Go标记"></a>Go标记</h3><p>Go程序可以由多个标记组成，可以使关键字，标识符，常量，字符串，符号。下面GO语句由6个标记组成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. fmt</span><br><span class="line">2. .</span><br><span class="line">3. Println</span><br><span class="line">4. (</span><br><span class="line">5. &quot;Hello, Go!&quot;</span><br><span class="line">6. )</span><br></pre></td></tr></table></figure></p>
+<h3 id="行分隔符"><a href="#行分隔符" class="headerlink" title="行分隔符"></a>行分隔符</h3><p>在 Go 程序中，一行代表一个语句结束。每个语句不需要像 C 家族中的其它语言一样以分号 ; 结尾，因为这些工作都将由 Go 编译器自动完成。</p>
+<p>如果你打算将多个语句写在同一行，它们则必须使用 ; 人为区分，但在实际开发中我们并不鼓励这种做法。</p>
+<h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><p>注释不会被编译，每一个包应该有相关注释。</p>
+<p>单行注释是最常见的注释形式，你可以在任何地方使用以 // 开头的单行注释。多行注释也叫块注释，均已以 /<em> 开头，并以 </em>/ 结尾。如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 单行注释 </span><br><span class="line"> /* </span><br><span class="line">   我是多行注释</span><br><span class="line"> */</span><br></pre></td></tr></table></figure></p>
+<h3 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h3><p>标识符用来命名变量、类型等程序实体。一个标识符实际上就是一个或是多个字母(A~Z和a~z)数字(0~9)、下划线_组成的序列，但是第一个字符必须是字母或下划线而不能是数字。</p>
+<p>以下是有效的标识符：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mahesh   kumar   abc   move_name   a_123</span><br><span class="line">myname50   _temp   j   a23b9   retVal</span><br></pre></td></tr></table></figure></p>
+<p>一下是无效的标识符：</p>
+<ul>
+<li>1ab（以数字开头）</li>
+<li>case（Go语言关键字）</li>
+<li>a+b（不允许以运算符命名）<h3 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h3>下面列举了 Go 代码中会使用到的 25 个关键字或保留字：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>break</td>
+<td style="text-align:center">default</td>
+<td style="text-align:center">func</td>
+<td style="text-align:center">interface</td>
+<td style="text-align:center">select</td>
+</tr>
+<tr>
+<td>case</td>
+<td style="text-align:center">defer</td>
+<td style="text-align:center">go</td>
+<td style="text-align:center">map</td>
+<td style="text-align:center">struct</td>
+</tr>
+<tr>
+<td>chan</td>
+<td style="text-align:center">else</td>
+<td style="text-align:center">goto</td>
+<td style="text-align:center">package</td>
+<td style="text-align:center">switch</td>
+</tr>
+<tr>
+<td>const</td>
+<td style="text-align:center">fallthrough</td>
+<td style="text-align:center">if</td>
+<td style="text-align:center">range</td>
+<td style="text-align:center">type</td>
+</tr>
+<tr>
+<td>continue</td>
+<td style="text-align:center">for</td>
+<td style="text-align:center">import</td>
+<td style="text-align:center">return</td>
+<td style="text-align:center">var</td>
+</tr>
+</tbody>
+</table>
+<p>除了以上介绍的这些关键字，Go语言还有36个预定义标识符：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>append</td>
+<td>bool</td>
+<td>byte</td>
+<td>cap</td>
+<td>close</td>
+<td>complex</td>
+<td>complex64</td>
+<td>complex128</td>
+<td>uint16</td>
+</tr>
+<tr>
+<td>copy</td>
+<td>false</td>
+<td>float32</td>
+<td>float64</td>
+<td>imag</td>
+<td>int</td>
+<td>int8</td>
+<td>int16</td>
+<td>uint32</td>
+</tr>
+<tr>
+<td>int32</td>
+<td>int64</td>
+<td>iota</td>
+<td>len</td>
+<td>make</td>
+<td>new</td>
+<td>nil</td>
+<td>panic</td>
+<td>uint64</td>
+</tr>
+<tr>
+<td>print</td>
+<td>println</td>
+<td>real</td>
+<td>recover</td>
+<td>string</td>
+<td>true</td>
+<td>uint</td>
+<td>uint8</td>
+<td>uintptr</td>
+</tr>
+</tbody>
+</table>
+<p>程序一般由关键字、常量、变量、运算符、类型和函数组成。<br>程序中可能会使用到这些分隔符：括号 ()，中括号 [] 和大括号 {}。<br>程序中可能会使用到这些标点符号：.、,、;、: 和 …。</p>
+<h3 id="Go语言的空格"><a href="#Go语言的空格" class="headerlink" title="Go语言的空格"></a>Go语言的空格</h3><p>Go语言中变量的声明必须使用空格隔开，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var age int;</span><br></pre></td></tr></table></figure></p>
+<p>加入空格使程序易看易阅读，看起来也更加美观。</p>
+<h2 id="Go语言数据类型"><a href="#Go语言数据类型" class="headerlink" title="Go语言数据类型"></a>Go语言数据类型</h2><p>在Go编程语言中，数据类型用于声明函数和变量。<br>数据类型的出现是为了把数据分成所需内存大小不同的数据，编程的时候需要用大数据的时候才需要申请大内存，就可以充分利用内存。<br>Go 语言按类别有以下几种数据类型：</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>类型和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>布尔型</strong> 布尔型的值只可以是常量 true 或者 false。一个简单的例子：var b bool = true。</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>数字类型</strong> 整型 int 和浮点型 float32、float64，Go 语言支持整型和浮点型数字，并且原生支持复数，其中中位的运算采用补码。</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>字符串类型:</strong> 字符串就是一串固定长度的字符连接起来的字符序列。Go的字符串是由单个字节连接起来的。Go语言的字符串的字节使用UTF-8编码标识Unicode文本。</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>派生类型:</strong> 包括： (a) 指针类型（Pointer）  (b) 数组类型  (c) 结构化类型(struct) (d) Channel 类型   (e) 函数类型   (f) 切片类型   (g) 接口类型（interface）   (h) Map 类型</td>
+</tr>
+</tbody>
+</table>
+<h3 id="数字类型"><a href="#数字类型" class="headerlink" title="数字类型"></a>数字类型</h3><p>Go 也有基于架构的类型，例如：int、uint 和 uintptr。</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>类型和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>uint8</strong> 无符号 8 位整型 (0 到 255)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>uint16</strong> 无符号 16 位整型 (0 到 65535)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>uint32</strong> 无符号 32 位整型 (0 到 4294967295)</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>uint64</strong> 无符号 64 位整型 (0 到 18446744073709551615)</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>int8</strong> 有符号 8 位整型 (-128 到 127)</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>int16</strong> 有符号 16 位整型 (-32768 到 32767)</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>int32</strong> 有符号 32 位整型 (-2147483648 到 2147483647)</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>int64</strong> 有符号 64 位整型 (-9223372036854775808 到 9223372036854775807)</td>
+</tr>
+</tbody>
+</table>
+<p>浮点型：</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>类型和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>float32</strong> IEEE-754 32位浮点型数</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>float64</strong> IEEE-754 64位浮点型数</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>complex64</strong> 32 位实数和虚数</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>complex128</strong> 64 位实数和虚数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="其他数字类型"><a href="#其他数字类型" class="headerlink" title="其他数字类型"></a>其他数字类型</h3><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>类型和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>byte</strong> 类似 uint8</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>rune</strong> 类似 int32</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>uint</strong> 32 或 64 位</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>int</strong> 与 uint 一样大小</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>uintptr</strong> 无符号整型，用于存放一个指针</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Go语言变量"><a href="#Go语言变量" class="headerlink" title="Go语言变量"></a>Go语言变量</h2><p>变量来源于数学，是计算机语言中能储存计算结果或能表示值抽象概念。变量可以通过变量名访问。<br>Go 语言变量名由字母、数字、下划线组成，其中首个字母不能为数字。<br>声明变量的一般形式是使用 var 关键字：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var identifier type</span><br></pre></td></tr></table></figure></p>
+<h3 id="变量声明"><a href="#变量声明" class="headerlink" title="变量声明"></a>变量声明</h3><p>第一种，指定变量类型，声明后若不赋值，使用默认值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var v_name v_type</span><br><span class="line">v_name = value</span><br></pre></td></tr></table></figure></p>
+<p>第二种，根据值自行判定变量类型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var v_name = value</span><br></pre></td></tr></table></figure></p>
+<p>第三种，省略var, 注意 :=左侧的变量不应该是已经声明过的，否则会导致编译错误。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">v_name := value</span><br><span class="line">// 例如  </span><br><span class="line">var a int  =  10  </span><br><span class="line">var b =  10 </span><br><span class="line">c :=  10</span><br></pre></td></tr></table></figure></p>
+<p>请看demo-2中的singleVariable.go<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line">var  a  =  &quot;Go教程&quot;</span><br><span class="line">var  b  string  =  &quot;https://wyb1992.github.io/&quot;</span><br><span class="line">var  c  bool</span><br><span class="line">func  main() &#123;</span><br><span class="line">    println(a, b, c)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行结果为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Go教程 https://wyb1992.github.io/ false</span><br></pre></td></tr></table></figure></p>
+<h3 id="多变量声明"><a href="#多变量声明" class="headerlink" title="多变量声明"></a>多变量声明</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//类型相同多个变量, 非全局变量  </span><br><span class="line">var vname1, vname2, vname3 type</span><br><span class="line">vname1, vname2, vname3 = v1, v2, v3 var vname1, vname2, vname3 = v1, v2, v3 // 和python很像,不需要显示声明类型，自动推断 </span><br><span class="line">vname1, vname2, vname3 := v1, v2, v3 // 出现在:=左侧的变量不应该是已经被声明过的，否则会导致编译错误  </span><br><span class="line">// 这种因式分解关键字的写法一般用于声明全局变量  </span><br><span class="line">var  ( </span><br><span class="line">    vname1 v_type1</span><br><span class="line">    vname2 v_type2 </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>请看demo-2中的multipleVariable.go<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line">var  x, y  int</span><br><span class="line">var ( // 这种因式分解关键字的写法一般用于声明全局变量</span><br><span class="line">    a  int</span><br><span class="line">    b  bool</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">var  c, d  int  =  1, 2</span><br><span class="line">var  e, f  =  123, &quot;hello&quot;</span><br><span class="line">// 这种不带声明格式的只能在函数体中出现</span><br><span class="line">// g, h := 123, &quot;hello&quot;</span><br><span class="line"></span><br><span class="line">func  main() &#123;</span><br><span class="line">    g, h  :=  123, &quot;hello&quot;</span><br><span class="line">    println(x, y, a, b, c, d, e, f, g, h)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行结果为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 0 0 false 1 2 123 hello 123 hello</span><br></pre></td></tr></table></figure></p>
+
   </div>
 </article>
 
@@ -197,7 +459,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#索引"><span class="toc-number">1.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言环境安装"><span class="toc-number">2.</span> <span class="toc-text">Go语言环境安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言结构"><span class="toc-number">3.</span> <span class="toc-text">Go语言结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hello-Go实例"><span class="toc-number">3.1.</span> <span class="toc-text">Hello Go实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行Go程序"><span class="toc-number">3.2.</span> <span class="toc-text">执行Go程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言基础语法"><span class="toc-number">4.</span> <span class="toc-text">Go语言基础语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Go标记"><span class="toc-number">4.1.</span> <span class="toc-text">Go标记</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#索引"><span class="toc-number">1.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言环境安装"><span class="toc-number">2.</span> <span class="toc-text">Go语言环境安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言结构"><span class="toc-number">3.</span> <span class="toc-text">Go语言结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hello-Go实例"><span class="toc-number">3.1.</span> <span class="toc-text">Hello Go实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行Go程序"><span class="toc-number">3.2.</span> <span class="toc-text">执行Go程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言基础语法"><span class="toc-number">4.</span> <span class="toc-text">Go语言基础语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Go标记"><span class="toc-number">4.1.</span> <span class="toc-text">Go标记</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#行分隔符"><span class="toc-number">4.2.</span> <span class="toc-text">行分隔符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注释"><span class="toc-number">4.3.</span> <span class="toc-text">注释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标识符"><span class="toc-number">4.4.</span> <span class="toc-text">标识符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关键字"><span class="toc-number">4.5.</span> <span class="toc-text">关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Go语言的空格"><span class="toc-number">4.6.</span> <span class="toc-text">Go语言的空格</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言数据类型"><span class="toc-number">5.</span> <span class="toc-text">Go语言数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数字类型"><span class="toc-number">5.1.</span> <span class="toc-text">数字类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他数字类型"><span class="toc-number">5.2.</span> <span class="toc-text">其他数字类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go语言变量"><span class="toc-number">6.</span> <span class="toc-text">Go语言变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量声明"><span class="toc-number">6.1.</span> <span class="toc-text">变量声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多变量声明"><span class="toc-number">6.2.</span> <span class="toc-text">多变量声明</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
