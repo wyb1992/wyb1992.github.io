@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="RabbitMQ 即一个消息队列，消息中间件最主要的作用是解耦，中间件最标准的用法是生产者生产消息传送到队列，消费者从队列中拿取消息并处理，生产者不用关心是谁来消费，消费者不用关心谁在生产消息，从而达到解耦的目的。在分布式的系统中，消息队列也会被用在很多其它的方面，比如：分布式事务的支持，RPC的调用等等。 RabbitMQ的高可用性、高性能、灵活性等一些特点吸引了我们，查阅了一些资料整理出此文。">
+<meta name="keywords" content="消息队列,中间件,Srping Boot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RabbitMQ详解">
+<meta property="og:url" content="https://wyb1992.github.io/2018/05/31/RabbitMQ详解/index.html">
+<meta property="og:site_name" content="wyb&#39;s blogs">
+<meta property="og:description" content="RabbitMQ 即一个消息队列，消息中间件最主要的作用是解耦，中间件最标准的用法是生产者生产消息传送到队列，消费者从队列中拿取消息并处理，生产者不用关心是谁来消费，消费者不用关心谁在生产消息，从而达到解耦的目的。在分布式的系统中，消息队列也会被用在很多其它的方面，比如：分布式事务的支持，RPC的调用等等。 RabbitMQ的高可用性、高性能、灵活性等一些特点吸引了我们，查阅了一些资料整理出此文。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://wyb1992.github.io/images/rabbitmq/rabbitmq-1.jpg">
+<meta property="og:image" content="https://wyb1992.github.io/images/rabbitmq/rabbitmq-2.png">
+<meta property="og:image" content="https://wyb1992.github.io/images/rabbitmq/rabbitmq-3.png">
+<meta property="og:image" content="https://wyb1992.github.io/images/gif/1.gif">
+<meta property="og:updated_time" content="2018-06-02T04:33:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RabbitMQ详解">
+<meta name="twitter:description" content="RabbitMQ 即一个消息队列，消息中间件最主要的作用是解耦，中间件最标准的用法是生产者生产消息传送到队列，消费者从队列中拿取消息并处理，生产者不用关心是谁来消费，消费者不用关心谁在生产消息，从而达到解耦的目的。在分布式的系统中，消息队列也会被用在很多其它的方面，比如：分布式事务的支持，RPC的调用等等。 RabbitMQ的高可用性、高性能、灵活性等一些特点吸引了我们，查阅了一些资料整理出此文。">
+<meta name="twitter:image" content="https://wyb1992.github.io/images/rabbitmq/rabbitmq-1.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>RabbitMQ详解</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a href="https://github.com/wyb1992">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2018/05/27/分布式事务/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&text=RabbitMQ详解"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&title=RabbitMQ详解"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&is_video=false&description=RabbitMQ详解"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RabbitMQ详解&body=Check out this article: https://wyb1992.github.io/2018/05/31/RabbitMQ详解/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&title=RabbitMQ详解"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&title=RabbitMQ详解"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&title=RabbitMQ详解"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&title=RabbitMQ详解"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&name=RabbitMQ详解&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#RabbitMQ介绍"><span class="toc-number">1.</span> <span class="toc-text">RabbitMQ介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac-OS安装RabbitMQ"><span class="toc-number">2.</span> <span class="toc-text">Mac OS安装RabbitMQ</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装"><span class="toc-number">2.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动服务"><span class="toc-number">2.2.</span> <span class="toc-text">启动服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#登录Web管理界面"><span class="toc-number">2.3.</span> <span class="toc-text">登录Web管理界面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关概念"><span class="toc-number">3.</span> <span class="toc-text">相关概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#交换机（Exchange）"><span class="toc-number">4.</span> <span class="toc-text">交换机（Exchange）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Direct-Exchange"><span class="toc-number">4.1.</span> <span class="toc-text">Direct Exchange</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Topic-Exchange"><span class="toc-number">4.2.</span> <span class="toc-text">Topic Exchange</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Headers-Exchange"><span class="toc-number">4.3.</span> <span class="toc-text">Headers Exchange</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fanout-Exchange"><span class="toc-number">4.4.</span> <span class="toc-text">Fanout Exchange</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-boot集成RabbitMQ"><span class="toc-number">5.</span> <span class="toc-text">Spring boot集成RabbitMQ</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置文件"><span class="toc-number">5.1.</span> <span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多对多使用"><span class="toc-number">5.2.</span> <span class="toc-text">多对多使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一对多发送"><span class="toc-number">5.2.1.</span> <span class="toc-text">一对多发送</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#多对多发送"><span class="toc-number">5.2.2.</span> <span class="toc-text">多对多发送</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#高级使用"><span class="toc-number">5.3.</span> <span class="toc-text">高级使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#对象的支持"><span class="toc-number">5.3.1.</span> <span class="toc-text">对象的支持</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Topic-Exchange-1"><span class="toc-number">5.3.2.</span> <span class="toc-text">Topic Exchange</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Fanout-Exchange-1"><span class="toc-number">5.3.3.</span> <span class="toc-text">Fanout Exchange</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资源"><span class="toc-number">6.</span> <span class="toc-text">参考资源</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        RabbitMQ详解
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">wyb's blogs</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-05-31T07:48:05.000Z" itemprop="datePublished">2018-05-31</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Srping-Boot/">Srping Boot</a>, <a class="tag-link" href="/tags/中间件/">中间件</a>, <a class="tag-link" href="/tags/消息队列/">消息队列</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>RabbitMQ 即一个消息队列，消息中间件最主要的作用是解耦，中间件最标准的用法是生产者生产消息传送到队列，消费者从队列中拿取消息并处理，生产者不用关心是谁来消费，消费者不用关心谁在生产消息，从而达到解耦的目的。在分布式的系统中，消息队列也会被用在很多其它的方面，比如：分布式事务的支持，RPC的调用等等。</p>
+<p>RabbitMQ的高可用性、高性能、灵活性等一些特点吸引了我们，查阅了一些资料整理出此文。</p>
+<h2 id="RabbitMQ介绍"><a href="#RabbitMQ介绍" class="headerlink" title="RabbitMQ介绍"></a>RabbitMQ介绍</h2><p>RabbitMQ是实现AMQP（高级消息队列协议）的消息中间件的一种，最初起源于金融系统，用于在分布式系统中存储转发消息，在易用性、扩展性、高可用性等方面表现不俗。RabbitMQ主要是为了实现系统之间的双向解耦而实现的。当生产者大量产生数据时，消费者无法快速消费，那么需要一个中间层，保存这个数据。</p>
+<p>AMQP，即Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦，消息的发送者无需知道消息使用者的存在，反之亦然。AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。</p>
+<p>RabbitMQ是一个开源的AMQP实现，服务器端用Erlang语言编写，支持多种客户端，如：Python、Ruby、.NET、Java、JMS、C、PHP、ActionScript、XMPP、STOMP等，支持AJAX。用于在分布式系统中存储转发消息，在易用性、扩展性、高可用性等方面表现不俗。</p>
+<h2 id="Mac-OS安装RabbitMQ"><a href="#Mac-OS安装RabbitMQ" class="headerlink" title="Mac OS安装RabbitMQ"></a>Mac OS安装RabbitMQ</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>在mac OS下安装RabbitMQ是非常简单的，一般默认RabbitMQ服务器依赖的Erlang已经安装，只需要用下面两个命令就可以完成RabbitMQ的安装（前提是homebrew已经被安装）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew update</span><br><span class="line">brew install rabbitmq</span><br></pre></td></tr></table></figure></p>
+<p>耐心等待，安装完成后需要将/usr/local/sbin添加到$PATH，可以将下面这两行加到~/.bash_profile：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># RabbitMQ Config</span><br><span class="line">export PATH=$PATH:/usr/local/sbin</span><br></pre></td></tr></table></figure></p>
+<p>编辑完后:wq保存退出，使环境变量立即生效。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bash_profile</span><br></pre></td></tr></table></figure>
+<h3 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h3><p>新打开一个终端，输入下面命令即可启动RabbitMQ服务：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rabbitmq-server</span><br></pre></td></tr></table></figure></p>
+<h3 id="登录Web管理界面"><a href="#登录Web管理界面" class="headerlink" title="登录Web管理界面"></a>登录Web管理界面</h3><p>浏览器输入<code>localhost:15672</code>,账号密码全输入guest即可登录。</p>
+<p>  <img src="/images/rabbitmq/rabbitmq-1.jpg" alt=""></p>
+<h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><p>通常我们谈到队列服务, 会有三个概念： 发消息者、队列、收消息者。RabbitMQ 在这个基本概念之上，多做了一层抽象，在发消息者和 队列之间，加入了交换器 (Exchange)。这样发消息者和队列就没有直接联系，转而变成发消息者把消息给交换器，交换器根据调度策略再把消息再给队列。</p>
+<p>  <img src="/images/rabbitmq/rabbitmq-2.png" alt=""></p>
+<ul>
+<li>左侧 P 代表 生产者，也就是往 RabbitMQ 发消息的程序。</li>
+<li>中间即是 RabbitMQ，<em>其中包括了 交换机 和 队列。</em></li>
+<li>右侧 C 代表 消费者，也就是往 RabbitMQ 拿消息的程序。</li>
+</ul>
+<p>那么，<em>其中比较重要的概念有 4 个，分别为：虚拟主机，交换机，队列，和绑定。</em></p>
+<ul>
+<li>虚拟主机：一个虚拟主机持有一组交换机、队列和绑定。为什么需要多个虚拟主机呢？很简单，RabbitMQ当中，<em>用户只能在虚拟主机的粒度进行权限控制。</em> 因此，如果需要禁止A组访问B组的交换机/队列/绑定，必须为A和B分别创建一个虚拟主机。每一个RabbitMQ服务器都有一个默认的虚拟主机“/”。</li>
+<li>交换机：<em>Exchange 用于转发消息，但是它不会做存储</em> ，如果没有 Queue bind 到 Exchange 的话，它会直接丢弃掉 Producer 发送过来的消息。 这里有一个比较重要的概念：<strong>路由键</strong> 。消息到交换机的时候，交互机会转发到对应的队列中，那么究竟转发到哪个队列，就要根据该路由键。</li>
+<li>绑定：也就是交换机需要和队列相绑定，这其中如上图所示，是多对多的关系。</li>
+</ul>
+<h2 id="交换机（Exchange）"><a href="#交换机（Exchange）" class="headerlink" title="交换机（Exchange）"></a>交换机（Exchange）</h2><p>交换机的功能主要是接收消息并且转发到绑定的队列，交换机不存储消息，在启用ack模式后，交换机找不到队列会返回错误。交换机有四种类型：Direct，topic，Headers和Fanout。</p>
+<ul>
+<li>Direct：direct 类型的行为是”先匹配, 再投送”. 即在绑定时设定一个 <strong>routing_key</strong>, 消息的<strong>routing_key</strong> 匹配时, 才会被交换器投送到绑定的队列中去.</li>
+<li>Topic：按规则转发消息（最灵活）</li>
+<li>Headers：设置header attribute参数类型的交换机</li>
+<li>Fanout：转发消息到所有绑定队列</li>
+</ul>
+<h3 id="Direct-Exchange"><a href="#Direct-Exchange" class="headerlink" title="Direct Exchange"></a>Direct Exchange</h3><p>Direct Exchange是RabbitMQ默认的交换机模式，也是最简单的模式，根据key全文匹配去寻找队列。</p>
+<p>  <img src="/images/rabbitmq/rabbitmq-3.png" alt=""></p>
+<p>第一个 X - Q1 就有一个 binding key，名字为 orange； X - Q2 就有 2 个 binding key，名字为 black 和 green。<em>当消息中的 路由键 和 这个 binding key 对应上的时候，那么就知道了该消息去到哪一个队列中。</em></p>
+<p>Ps：为什么 X 到 Q2 要有 black，green，2个 binding key呢，一个不就行了吗？ - 这个主要是因为可能又有 Q3，而Q3只接受 black 的信息，而Q2不仅接受black 的信息，还接受 green 的信息。</p>
+<h3 id="Topic-Exchange"><a href="#Topic-Exchange" class="headerlink" title="Topic Exchange"></a>Topic Exchange</h3><p><em>Topic Exchange 转发消息主要是根据通配符。</em> 在这种交换机下，队列和交换机的绑定会定义一种路由模式，那么，通配符就要在这种路由模式和路由键之间匹配后交换机才能转发消息。</p>
+<p>在这种交换机模式下：</p>
+<ul>
+<li>路由键必须是一串字符，用句号（<code>.</code>） 隔开，比如说 agreements.us，或者 agreements.eu.stockholm 等。</li>
+<li>路由模式必须包含一个 星号（<code>*</code>），主要用于匹配路由键指定位置的一个单词，比如说，一个路由模式是这样子：agreements..b.*，那么就只能匹配路由键是这样子的：第一个单词是 agreements，第四个单词是 b。 井号（#）就表示相当于一个或者多个单词，例如一个匹配模式是agreements.eu.berlin.#，那么，以agreements.eu.berlin开头的路由键都是可以的。</li>
+</ul>
+<p>具体代码发送的时候还是一样，第一个参数表示交换机，第二个参数表示routing key，第三个参数即消息。如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rabbitTemplate.convertAndSend(&quot;testTopicExchange&quot;,&quot;key1.a.c.key2&quot;, &quot; this is  RabbitMQ!&quot;);</span><br></pre></td></tr></table></figure></p>
+<p>topic 和 direct 类似, 只是匹配上支持了”模式”, 在”点分”的 routing_key 形式中, 可以使用两个通配符:</p>
+<ul>
+<li><code>*</code>表示一个词.</li>
+<li><code>#</code>表示零个或多个词.</li>
+</ul>
+<h3 id="Headers-Exchange"><a href="#Headers-Exchange" class="headerlink" title="Headers Exchange"></a>Headers Exchange</h3><p>headers 也是根据规则匹配, 相较于 direct 和 topic 固定地使用 routing_key , headers 则是一个自定义匹配规则的类型. 在队列与交换器绑定时, 会设定一组键值对规则, 消息中也包括一组键值对( headers 属性), 当这些键值对有一对, 或全部匹配时, 消息被投送到对应队列.</p>
+<h3 id="Fanout-Exchange"><a href="#Fanout-Exchange" class="headerlink" title="Fanout Exchange"></a>Fanout Exchange</h3><p>Fanout Exchange 消息广播的模式，不管路由键或者是路由模式，<em>会把消息发给绑定给它的全部队列</em>，如果配置了routing_key会被忽略。</p>
+<h2 id="Spring-boot集成RabbitMQ"><a href="#Spring-boot集成RabbitMQ" class="headerlink" title="Spring boot集成RabbitMQ"></a>Spring boot集成RabbitMQ</h2><h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><ol>
+<li><p>配置pom包，主要是添加spring-boot-starter-amqp的支持</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;spring-boot-starter-amqp&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置rabbitmq的安装地址、端口以及账户信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">spring.application.name=spirng-boot-rabbitmq  </span><br><span class="line"> </span><br><span class="line">spring.rabbitmq.host=127.0.0.1 </span><br><span class="line">spring.rabbitmq.port=5672 </span><br><span class="line">spring.rabbitmq.username=guest </span><br><span class="line">spring.rabbitmq.password=guest</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>队列配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">public class RabbitConfig &#123;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">    public Queue Queue() &#123;</span><br><span class="line">        return new Queue(&quot;hello&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>发送者，AmqpTemplate是spring boot提供的默认实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class HelloSender &#123;</span><br><span class="line"></span><br><span class="line">	@Autowired</span><br><span class="line">	private AmqpTemplate rabbitTemplate;</span><br><span class="line"></span><br><span class="line">	public void send() &#123;</span><br><span class="line">		String context = &quot;hello &quot; + new Date();</span><br><span class="line">		System.out.println(&quot;Sender : &quot; + context);</span><br><span class="line">		this.rabbitTemplate.convertAndSend(&quot;hello&quot;, context);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接收者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">@RabbitListener(queues = &quot;hello&quot;)</span><br><span class="line">public class HelloReceiver &#123;</span><br><span class="line"></span><br><span class="line">    @RabbitHandler</span><br><span class="line">    public void process(String hello) &#123;</span><br><span class="line">        System.out.println(&quot;Receiver  : &quot; + hello);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(SpringRunner.class)</span><br><span class="line">@SpringBootTest</span><br><span class="line">public class RabbitMqHelloTest &#123;</span><br><span class="line"></span><br><span class="line">	@Autowired</span><br><span class="line">	private HelloSender helloSender;</span><br><span class="line"></span><br><span class="line">	@Test</span><br><span class="line">	public void hello() throws Exception &#123;</span><br><span class="line">		helloSender.send();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p>注意，发送者和接收者的queue name必须一致，不然不能接收</p>
+</blockquote>
+<h3 id="多对多使用"><a href="#多对多使用" class="headerlink" title="多对多使用"></a>多对多使用</h3><p>一个发送者，N个接收者或者N个发送者和N个接收者会出现什么情况呢？</p>
+<h4 id="一对多发送"><a href="#一对多发送" class="headerlink" title="一对多发送"></a>一对多发送</h4><p>对上面的代码进行了小改造，接收端注册了两个Receiver，Receiver1和Receiver2，发送端加入参数计数，接收端打印接收到的参数，下面是测试代码，发送一百条消息，来观察两个接收端的执行效果。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void oneToMany() throws Exception &#123;</span><br><span class="line">	for (int i = 0; i &lt; 100; i++)&#123;</span><br><span class="line">		sender.send(i);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>结果如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">Sender1 : spirng boot neo queue ****** 1</span><br><span class="line">Sender1 : spirng boot neo queue ****** 2</span><br><span class="line">Sender1 : spirng boot neo queue ****** 3</span><br><span class="line">Sender1 : spirng boot neo queue ****** 4</span><br><span class="line">Sender1 : spirng boot neo queue ****** 5</span><br><span class="line">Sender1 : spirng boot neo queue ****** 6</span><br><span class="line">Sender1 : spirng boot neo queue ****** 7</span><br><span class="line">Sender1 : spirng boot neo queue ****** 8</span><br><span class="line">Sender1 : spirng boot neo queue ****** 9</span><br><span class="line">Sender1 : spirng boot neo queue ****** 10</span><br><span class="line">Sender1 : spirng boot neo queue ****** 11</span><br><span class="line">Sender1 : spirng boot neo queue ****** 12</span><br><span class="line">Sender1 : spirng boot neo queue ****** 13</span><br><span class="line">Sender1 : spirng boot neo queue ****** 14</span><br><span class="line">Sender1 : spirng boot neo queue ****** 15</span><br><span class="line">Sender1 : spirng boot neo queue ****** 16</span><br><span class="line">Sender1 : spirng boot neo queue ****** 17</span><br><span class="line">Sender1 : spirng boot neo queue ****** 18</span><br><span class="line">Sender1 : spirng boot neo queue ****** 19</span><br><span class="line">Sender1 : spirng boot neo queue ****** 20</span><br><span class="line">Sender1 : spirng boot neo queue ****** 21</span><br><span class="line">Sender1 : spirng boot neo queue ****** 22</span><br><span class="line">Sender1 : spirng boot neo queue ****** 23</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 1</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 3</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 5</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 7</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 9</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 11</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 13</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 15</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 17</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 19</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 21</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 23</span><br></pre></td></tr></table></figure></p>
+<p>根据返回结果得到结论：<strong>一个发送者，N个接受者,经过测试会均匀的将消息发送到N个接收者中</strong></p>
+<h4 id="多对多发送"><a href="#多对多发送" class="headerlink" title="多对多发送"></a>多对多发送</h4><p>复制了一份发送者，加入标记，在一百个循环中相互交替发送<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Test public void manyToMany() throws Exception &#123;</span><br><span class="line">   for (int i = 0; i &lt; 100; i++) &#123;</span><br><span class="line">      neoSender.send(i);</span><br><span class="line">      neoSender2.send(i);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Sender2 : spirng boot neo queue ****** 20</span><br><span class="line">Sender1 : spirng boot neo queue ****** 21</span><br><span class="line">Receiver 1: spirng boot neo queue ****** 20</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 20</span><br><span class="line">Sender2 : spirng boot neo queue ****** 21</span><br><span class="line">Sender1 : spirng boot neo queue ****** 22</span><br><span class="line">Receiver 1: spirng boot neo queue ****** 21</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 21</span><br><span class="line">Sender2 : spirng boot neo queue ****** 22</span><br><span class="line">Sender1 : spirng boot neo queue ****** 23</span><br><span class="line">Receiver 1: spirng boot neo queue ****** 22</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 22</span><br><span class="line">Sender2 : spirng boot neo queue ****** 23</span><br><span class="line">Sender1 : spirng boot neo queue ****** 24</span><br><span class="line">Receiver 1: spirng boot neo queue ****** 23</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 23</span><br><span class="line">Receiver 1: spirng boot neo queue ****** 24</span><br><span class="line">Sender2 : spirng boot neo queue ****** 24</span><br><span class="line">Sender1 : spirng boot neo queue ****** 25</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 24</span><br><span class="line">Sender2 : spirng boot neo queue ****** 25</span><br><span class="line">Receiver 1: spirng boot neo queue ****** 25</span><br><span class="line">Sender1 : spirng boot neo queue ****** 26</span><br><span class="line">Sender2 : spirng boot neo queue ****** 26</span><br><span class="line">Receiver 2: spirng boot neo queue ****** 25</span><br><span class="line">Receiver 1: spirng boot neo queue ****** 26</span><br></pre></td></tr></table></figure></p>
+<p>根据返回结果得到结论：<strong>和一对多一样，接收端仍然会均匀接收到消息</strong></p>
+<h3 id="高级使用"><a href="#高级使用" class="headerlink" title="高级使用"></a>高级使用</h3><h4 id="对象的支持"><a href="#对象的支持" class="headerlink" title="对象的支持"></a>对象的支持</h4><p>Spring Boot完美的支持，不需要额外的配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 发送者</span><br><span class="line">public void send(User user) &#123;</span><br><span class="line">   System.out.println(&quot;Sender object: &quot; + user.toString());</span><br><span class="line">   this.rabbitTemplate.convertAndSend(&quot;object&quot;, user);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 接受者</span><br><span class="line">@RabbitHandler public void process(User user) &#123;</span><br><span class="line">    System.out.println(&quot;Receiver object : &quot; + user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Receiver object : User&#123;name=&apos;wyb&apos;, password=&apos;123456&apos;&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Topic-Exchange-1"><a href="#Topic-Exchange-1" class="headerlink" title="Topic Exchange"></a>Topic Exchange</h4><p>topic 是RabbitMQ中最灵活的一种方式，可以根据routing_key自由的绑定不同的队列</p>
+<p>首先对topic规则配置，这里使用两个队列来测试。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">@Configuration public class TopicRabbitConfig &#123;</span><br><span class="line"></span><br><span class="line">    final static String message = &quot;topic.message&quot;;</span><br><span class="line">    final static String messages = &quot;topic.messages&quot;;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">  public Queue queueMessage() &#123;</span><br><span class="line">        return new Queue(TopicRabbitConfig.message);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">  public Queue queueMessages() &#123;</span><br><span class="line">        return new Queue(TopicRabbitConfig.messages);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">  TopicExchange exchange() &#123;</span><br><span class="line">        return new TopicExchange(&quot;topicExchange&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">  Binding bindingExchangeMessage(Queue queueMessage, TopicExchange exchange) &#123;</span><br><span class="line">        return BindingBuilder.bind(queueMessage).to(exchange).with(&quot;topic.message&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">  Binding bindingExchangeMessages(Queue queueMessages, TopicExchange exchange) &#123;</span><br><span class="line">        return BindingBuilder.bind(queueMessages).to(exchange).with(&quot;topic.#&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用queueMessages同时匹配两个队列，queueMessage只匹配”topic.message”队列</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public void send() &#123;</span><br><span class="line">   String context = &quot;hi, I am message all&quot;;</span><br><span class="line">   System.out.println(&quot;Sender : &quot; + context);</span><br><span class="line">   this.rabbitTemplate.convertAndSend(&quot;topicExchange&quot;, &quot;topic.1&quot;, context);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void send1() &#123;</span><br><span class="line">   String context = &quot;hi, I am message 1&quot;;</span><br><span class="line">   System.out.println(&quot;Sender : &quot; + context);</span><br><span class="line">   this.rabbitTemplate.convertAndSend(&quot;topicExchange&quot;, &quot;topic.message&quot;, context);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void send2() &#123;</span><br><span class="line">   String context = &quot;hi, I am messages 2&quot;;</span><br><span class="line">   System.out.println(&quot;Sender : &quot; + context);</span><br><span class="line">   this.rabbitTemplate.convertAndSend(&quot;topicExchange&quot;, &quot;topic.messages&quot;, context);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>发送send1会匹配到topic.#和topic.message 两个Receiver都可以收到消息，发送send2只有topic.#可以匹配所有只有Receiver2监听到消息。</p>
+<h4 id="Fanout-Exchange-1"><a href="#Fanout-Exchange-1" class="headerlink" title="Fanout Exchange"></a>Fanout Exchange</h4><p>Fanout 就是我们熟悉的广播模式或者订阅模式，给Fanout交换机发送消息，绑定了这个交换机的所有队列都收到这个消息。</p>
+<p>Fanout 相关配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">@Configuration public class FanoutRabbitConfig &#123;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">  public Queue AMessage() &#123;</span><br><span class="line">        return new Queue(&quot;fanout.A&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">  public Queue BMessage() &#123;</span><br><span class="line">        return new Queue(&quot;fanout.B&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">  public Queue CMessage() &#123;</span><br><span class="line">        return new Queue(&quot;fanout.C&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">  FanoutExchange fanoutExchange() &#123;</span><br><span class="line">        return new FanoutExchange(&quot;fanoutExchange&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">  Binding bindingExchangeA(Queue AMessage,FanoutExchange fanoutExchange) &#123;</span><br><span class="line">        return BindingBuilder.bind(AMessage).to(fanoutExchange);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">  Binding bindingExchangeB(Queue BMessage, FanoutExchange fanoutExchange) &#123;</span><br><span class="line">        return BindingBuilder.bind(BMessage).to(fanoutExchange);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">  Binding bindingExchangeC(Queue CMessage, FanoutExchange fanoutExchange) &#123;</span><br><span class="line">        return BindingBuilder.bind(CMessage).to(fanoutExchange);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里使用了A、B、C三个队列绑定到Fanout交换机上面，发送端的routing_key写任何字符都会被忽略：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void send() &#123;</span><br><span class="line">   String context = &quot;hi, fanout msg &quot;;</span><br><span class="line">   System.out.println(&quot;Sender : &quot; + context);</span><br><span class="line">   this.rabbitTemplate.convertAndSend(&quot;fanoutExchange&quot;,&quot;&quot;, context);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fanout Receiver B: hi, fanout msg </span><br><span class="line">fanout Receiver C: hi, fanout msg </span><br><span class="line">fanout Receiver A: hi, fanout msg</span><br></pre></td></tr></table></figure></p>
+<p>结果说明，绑定到fanout交换机上面的队列都收到了消息。</p>
+<p>Demo代码均可在Github上clone，希望本篇文章对您有所帮助~</p>
+<p><a href="https://github.com/wyb1992/spring-boot-learning" target="_blank" rel="noopener">Github代码</a></p>
+<p>  <img src="/images/gif/1.gif" alt=""></p>
+<h2 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h2><p><a href="http://www.rabbitmq.com/getstarted.html" target="_blank" rel="noopener">RabbitMQ</a><br><a href="https://github.com/401Studio/WeekLearn/issues/2" target="_blank" rel="noopener">RabbitMQ：Spring 集成 RabbitMQ 与其概念，消息持久化，ACK机制等</a><br><a href="https://www.zouyesheng.com/rabbitmq.html" target="_blank" rel="noopener">RabbitMQ 使用参考</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a href="https://github.com/wyb1992">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#RabbitMQ介绍"><span class="toc-number">1.</span> <span class="toc-text">RabbitMQ介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac-OS安装RabbitMQ"><span class="toc-number">2.</span> <span class="toc-text">Mac OS安装RabbitMQ</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装"><span class="toc-number">2.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动服务"><span class="toc-number">2.2.</span> <span class="toc-text">启动服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#登录Web管理界面"><span class="toc-number">2.3.</span> <span class="toc-text">登录Web管理界面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关概念"><span class="toc-number">3.</span> <span class="toc-text">相关概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#交换机（Exchange）"><span class="toc-number">4.</span> <span class="toc-text">交换机（Exchange）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Direct-Exchange"><span class="toc-number">4.1.</span> <span class="toc-text">Direct Exchange</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Topic-Exchange"><span class="toc-number">4.2.</span> <span class="toc-text">Topic Exchange</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Headers-Exchange"><span class="toc-number">4.3.</span> <span class="toc-text">Headers Exchange</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fanout-Exchange"><span class="toc-number">4.4.</span> <span class="toc-text">Fanout Exchange</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-boot集成RabbitMQ"><span class="toc-number">5.</span> <span class="toc-text">Spring boot集成RabbitMQ</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置文件"><span class="toc-number">5.1.</span> <span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多对多使用"><span class="toc-number">5.2.</span> <span class="toc-text">多对多使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一对多发送"><span class="toc-number">5.2.1.</span> <span class="toc-text">一对多发送</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#多对多发送"><span class="toc-number">5.2.2.</span> <span class="toc-text">多对多发送</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#高级使用"><span class="toc-number">5.3.</span> <span class="toc-text">高级使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#对象的支持"><span class="toc-number">5.3.1.</span> <span class="toc-text">对象的支持</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Topic-Exchange-1"><span class="toc-number">5.3.2.</span> <span class="toc-text">Topic Exchange</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Fanout-Exchange-1"><span class="toc-number">5.3.3.</span> <span class="toc-text">Fanout Exchange</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资源"><span class="toc-number">6.</span> <span class="toc-text">参考资源</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&text=RabbitMQ详解"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&title=RabbitMQ详解"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&is_video=false&description=RabbitMQ详解"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RabbitMQ详解&body=Check out this article: https://wyb1992.github.io/2018/05/31/RabbitMQ详解/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&title=RabbitMQ详解"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&title=RabbitMQ详解"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&title=RabbitMQ详解"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&title=RabbitMQ详解"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://wyb1992.github.io/2018/05/31/RabbitMQ详解/&name=RabbitMQ详解&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 wyb
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a href="https://github.com/wyb1992">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
