@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="前言Spring Boot中除了对常用的关系型数据库提供了优秀的自动化支持之外，对于很多NoSQL数据库一样提供了自动化配置的支持，包括：Redis， MongoDB，Elasticsearch，Solr和Cassandra。 Redis简介Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库。它是目前业界使用最广泛的内存数据存储。相比m">
+<meta name="keywords" content="后端,spring boot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Spring Boot中使用Redis数据库">
+<meta property="og:url" content="https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/index.html">
+<meta property="og:site_name" content="wyb&#39;s blogs">
+<meta property="og:description" content="前言Spring Boot中除了对常用的关系型数据库提供了优秀的自动化支持之外，对于很多NoSQL数据库一样提供了自动化配置的支持，包括：Redis， MongoDB，Elasticsearch，Solr和Cassandra。 Redis简介Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库。它是目前业界使用最广泛的内存数据存储。相比m">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://wyb1992.github.io/images/spring-boot-redis/spring-boot-redis-1.jpg">
+<meta property="og:image" content="https://wyb1992.github.io/images/spring-boot-redis/spring-boot-redis-2.jpg">
+<meta property="og:updated_time" content="2018-06-11T08:29:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在Spring Boot中使用Redis数据库">
+<meta name="twitter:description" content="前言Spring Boot中除了对常用的关系型数据库提供了优秀的自动化支持之外，对于很多NoSQL数据库一样提供了自动化配置的支持，包括：Redis， MongoDB，Elasticsearch，Solr和Cassandra。 Redis简介Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库。它是目前业界使用最广泛的内存数据存储。相比m">
+<meta name="twitter:image" content="https://wyb1992.github.io/images/spring-boot-redis/spring-boot-redis-1.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>在Spring Boot中使用Redis数据库</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a href="https://github.com/wyb1992">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2018/06/07/Spring-Boot中使用JavaMailSender发送邮件/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&text=在Spring Boot中使用Redis数据库"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&title=在Spring Boot中使用Redis数据库"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&is_video=false&description=在Spring Boot中使用Redis数据库"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=在Spring Boot中使用Redis数据库&body=Check out this article: https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&title=在Spring Boot中使用Redis数据库"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&title=在Spring Boot中使用Redis数据库"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&title=在Spring Boot中使用Redis数据库"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&title=在Spring Boot中使用Redis数据库"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&name=在Spring Boot中使用Redis数据库&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis简介"><span class="toc-number">2.</span> <span class="toc-text">Redis简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Redis"><span class="toc-number">3.</span> <span class="toc-text">使用Redis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#引入依赖"><span class="toc-number">3.1.</span> <span class="toc-text">引入依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数配置"><span class="toc-number">3.2.</span> <span class="toc-text">参数配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试案例"><span class="toc-number">3.3.</span> <span class="toc-text">测试案例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        在Spring Boot中使用Redis数据库
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">wyb's blogs</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-06-11T03:33:22.000Z" itemprop="datePublished">2018-06-11</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/spring-boot/">spring boot</a>, <a class="tag-link" href="/tags/后端/">后端</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Spring Boot中除了对常用的关系型数据库提供了优秀的自动化支持之外，对于很多NoSQL数据库一样提供了自动化配置的支持，包括：Redis， MongoDB，Elasticsearch，Solr和Cassandra。</p>
+<h2 id="Redis简介"><a href="#Redis简介" class="headerlink" title="Redis简介"></a>Redis简介</h2><p>Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库。<br>它是目前业界使用最广泛的内存数据存储。相比memcached，Redis支持更丰富的数据结构，例如hasheslists，sets等，同时支持数据持久化。除此之外，Redis还提供一些类数据库的特性，比如事务，HA，主从库。可以说Redis兼具了缓存系统和数据库的一些特性，因此有着丰富的应用场景。本文介绍Redis在Spring Boot中两个典型的应用场景。</p>
+<ul>
+<li><a href="http://redis.io/" target="_blank" rel="noopener">Redis官网</a></li>
+<li><a href="http://www.redis.cn/" target="_blank" rel="noopener">Redis中文社区</a></li>
+</ul>
+<h2 id="使用Redis"><a href="#使用Redis" class="headerlink" title="使用Redis"></a>使用Redis</h2><h3 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h3><p>Spring Boot提供的数据访问框架Spring Data Redis基于Jedis。可以通过引入<code>spring-boot-starter-redis</code>来配置依赖关系。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="参数配置"><a href="#参数配置" class="headerlink" title="参数配置"></a>参数配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># REDIS (RedisProperties)</span><br><span class="line"># Redis数据库索引（默认为0）</span><br><span class="line">spring.redis.database=0</span><br><span class="line"># Redis服务器地址</span><br><span class="line">spring.redis.host=localhost</span><br><span class="line"># Redis服务器连接端口</span><br><span class="line">spring.redis.port=6379</span><br><span class="line"># Redis服务器连接密码（默认为空）</span><br><span class="line">spring.redis.password=</span><br><span class="line"># 连接池最大连接数（使用负值表示没有限制）</span><br><span class="line">spring.redis.pool.max-active=8</span><br><span class="line"># 连接池最大阻塞等待时间（使用负值表示没有限制）</span><br><span class="line">spring.redis.pool.max-wait=-1</span><br><span class="line"># 连接池中的最大空闲连接</span><br><span class="line">spring.redis.pool.max-idle=8</span><br><span class="line"># 连接池中的最小空闲连接</span><br><span class="line">spring.redis.pool.min-idle=0</span><br><span class="line"># 连接超时时间（毫秒）</span><br><span class="line">spring.redis.timeout=0</span><br></pre></td></tr></table></figure>
+<p>其中spring.redis.database的配置通常使用0即可，Redis在配置的时候可以设置数据库数量，默认为16，可以理解为数据库的schema</p>
+<h3 id="测试案例"><a href="#测试案例" class="headerlink" title="测试案例"></a>测试案例</h3><p>我们编写一个简单的测试案例，来演示下如何访问Redis。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(SpringRunner.class)</span><br><span class="line">@SpringBootTest public class SpringBootRedisApplicationTests &#123;</span><br><span class="line"></span><br><span class="line">   @Autowired</span><br><span class="line">   private StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">   @Test</span><br><span class="line">   public void test() throws Exception &#123;</span><br><span class="line">      // 保存字符串</span><br><span class="line">   stringRedisTemplate.opsForValue().set(&quot;aaa&quot;, &quot;111&quot;);</span><br><span class="line">      Assert.assertEquals(&quot;111&quot;, stringRedisTemplate.opsForValue().get(&quot;aaa&quot;));</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/spring-boot-redis/spring-boot-redis-1.jpg" alt="spring-boot-redis-1"></p>
+<p>通过上面这段极为简单的测试案例演示了如何通过自动配置的<code>StringRedisTemplate</code>对象进行Redis的读写操作，该对象从命名中就可注意到支持的是String类型。如果有使用过spring-data-redis的开发者一定熟悉<code>RedisTemplate&lt;K, V&gt;</code>接口，<code>StringRedisTemplate</code>就相当于<code>RedisTemplate&lt;String, String&gt;</code>的实现。</p>
+<p>除了String类型，实战中我们还经常会在Redis中存储对象，这时候我们就会想是否可以使用类似<code>RedisTemplate&lt;String, User&gt;</code>来初始化并进行操作。但是Spring Boot并不支持直接使用，需要我们自己实现<code>RedisSerializer&lt;T&gt;</code>接口来对传入对象进行序列化和反序列化，下面我们通过一个实例来完成对象的读写操作。</p>
+<p><strong>创建要存储的对象User</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">public class User implements Serializable &#123;</span><br><span class="line"></span><br><span class="line">    private static final long serialVersionUID = -1L;</span><br><span class="line"></span><br><span class="line">    private String username;</span><br><span class="line">    private Integer age;</span><br><span class="line"></span><br><span class="line">    public User(String username, Integer age) &#123;</span><br><span class="line">        this.username = username;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static long getSerialVersionUID() &#123;</span><br><span class="line">        return serialVersionUID;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getUsername() &#123;</span><br><span class="line">        return username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setUsername(String username) &#123;</span><br><span class="line">        this.username = username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Integer getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(Integer age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>实现对象的序列化接口</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">public class RedisObjectSerializer implements RedisSerializer&lt;Object&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private Converter&lt;Object, byte[]&gt; serializer = new SerializingConverter();</span><br><span class="line">    private Converter&lt;byte[], Object&gt; deserializer = new DeserializingConverter();</span><br><span class="line"></span><br><span class="line">    static final byte[] EMPTY_ARRAY = new byte[0];</span><br><span class="line"></span><br><span class="line">    public Object deserialize(byte[] bytes) &#123;</span><br><span class="line">        if (isEmpty(bytes)) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            return deserializer.convert(bytes);</span><br><span class="line">        &#125; catch (Exception ex) &#123;</span><br><span class="line">            throw new SerializationException(&quot;Cannot deserialize&quot;, ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public byte[] serialize(Object object) &#123;</span><br><span class="line">        if (object == null) &#123;</span><br><span class="line">            return EMPTY_ARRAY;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            return serializer.convert(object);</span><br><span class="line">        &#125; catch (Exception ex) &#123;</span><br><span class="line">            return EMPTY_ARRAY;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private boolean isEmpty(byte[] data) &#123;</span><br><span class="line">        return (data == null || data.length == 0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>配置针对User的RedisTemplate实例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@Configuration public class RedisConfig &#123;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">    JedisConnectionFactory jedisConnectionFactory() &#123;</span><br><span class="line">        return new JedisConnectionFactory();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">    public RedisTemplate&lt;String, User&gt; redisTemplate(RedisConnectionFactory factory) &#123;</span><br><span class="line">        RedisTemplate&lt;String, User&gt; template = new RedisTemplate&lt;String, User&gt;();</span><br><span class="line">        template.setConnectionFactory(jedisConnectionFactory());</span><br><span class="line">        template.setKeySerializer(new StringRedisSerializer());</span><br><span class="line">        template.setValueSerializer(new RedisObjectSerializer());</span><br><span class="line">        return template;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>编写测试用例实验效果</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@Autowired private RedisTemplate&lt;String, String&gt; redisTemplate;</span><br><span class="line"></span><br><span class="line">@Test public void testSave() throws Exception &#123;</span><br><span class="line"></span><br><span class="line">   // 保存对象</span><br><span class="line">   User user = new User(&quot;小王&quot;, 20);</span><br><span class="line">   redisTemplate.opsForValue().set(user.getUsername(), JSONObject.toJSONString(user));</span><br><span class="line"></span><br><span class="line">   user = new User(&quot;小李&quot;, 30);</span><br><span class="line">   redisTemplate.opsForValue().set(user.getUsername(), JSONObject.toJSONString(user));</span><br><span class="line"></span><br><span class="line">   user = new User(&quot;小赵&quot;, 40);</span><br><span class="line">   redisTemplate.opsForValue().set(user.getUsername(), JSONObject.toJSONString(user));</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/spring-boot-redis/spring-boot-redis-2.jpg" alt="spring-boot-redis-2"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>当然spring-data-redis中提供的数据操作远不止这些，本文仅作为在Spring Boot中使用redis时的配置参考，更多对于redis的操作使用，请参考<a href="http://docs.spring.io/spring-data/redis/docs/1.6.2.RELEASE/reference/html/" target="_blank" rel="noopener">Spring-data-redis Reference</a>。</p>
+<ul>
+<li><a href="https://wyb1992.github.io/">代码地址</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a href="https://github.com/wyb1992">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis简介"><span class="toc-number">2.</span> <span class="toc-text">Redis简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Redis"><span class="toc-number">3.</span> <span class="toc-text">使用Redis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#引入依赖"><span class="toc-number">3.1.</span> <span class="toc-text">引入依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数配置"><span class="toc-number">3.2.</span> <span class="toc-text">参数配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试案例"><span class="toc-number">3.3.</span> <span class="toc-text">测试案例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&text=在Spring Boot中使用Redis数据库"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&title=在Spring Boot中使用Redis数据库"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&is_video=false&description=在Spring Boot中使用Redis数据库"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=在Spring Boot中使用Redis数据库&body=Check out this article: https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&title=在Spring Boot中使用Redis数据库"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&title=在Spring Boot中使用Redis数据库"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&title=在Spring Boot中使用Redis数据库"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&title=在Spring Boot中使用Redis数据库"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://wyb1992.github.io/2018/06/11/在Spring-Boot中使用Redis数据库/&name=在Spring Boot中使用Redis数据库&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 wyb
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a href="https://github.com/wyb1992">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-120230928-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
