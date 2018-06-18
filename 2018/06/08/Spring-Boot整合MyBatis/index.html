@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="前言新公司的新项目使用的是mybatis，以前的项目使用的是Hibernate，所以在网上找了一些关于Spring Boot和MyBatis组合的相关资料，总结后分享出来。 ORM框架的本质是简化编程中操作数据库的编码，发展到现在基本上就剩两家了，一个是宣称可以不用写一句SQL的Hibernate，一个是可以灵活调试动态sql的MyBatis。两者各有特点，在企业级系统开发中可以根据需求灵活使用。">
+<meta name="keywords" content="后端,spring boot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot整合MyBatis">
+<meta property="og:url" content="https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/index.html">
+<meta property="og:site_name" content="wyb&#39;s blogs">
+<meta property="og:description" content="前言新公司的新项目使用的是mybatis，以前的项目使用的是Hibernate，所以在网上找了一些关于Spring Boot和MyBatis组合的相关资料，总结后分享出来。 ORM框架的本质是简化编程中操作数据库的编码，发展到现在基本上就剩两家了，一个是宣称可以不用写一句SQL的Hibernate，一个是可以灵活调试动态sql的MyBatis。两者各有特点，在企业级系统开发中可以根据需求灵活使用。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-09T06:07:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Boot整合MyBatis">
+<meta name="twitter:description" content="前言新公司的新项目使用的是mybatis，以前的项目使用的是Hibernate，所以在网上找了一些关于Spring Boot和MyBatis组合的相关资料，总结后分享出来。 ORM框架的本质是简化编程中操作数据库的编码，发展到现在基本上就剩两家了，一个是宣称可以不用写一句SQL的Hibernate，一个是可以灵活调试动态sql的MyBatis。两者各有特点，在企业级系统开发中可以根据需求灵活使用。">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Spring Boot整合MyBatis</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a href="https://github.com/wyb1992">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/06/11/在Spring-Boot中使用Redis数据库/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/06/07/Spring-Boot中使用JavaMailSender发送邮件/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&text=Spring Boot整合MyBatis"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&title=Spring Boot整合MyBatis"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&is_video=false&description=Spring Boot整合MyBatis"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Spring Boot整合MyBatis&body=Check out this article: https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&title=Spring Boot整合MyBatis"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&title=Spring Boot整合MyBatis"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&title=Spring Boot整合MyBatis"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&title=Spring Boot整合MyBatis"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&name=Spring Boot整合MyBatis&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#整合MyBatis"><span class="toc-number">2.</span> <span class="toc-text">整合MyBatis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#添加依赖"><span class="toc-number">2.1.</span> <span class="toc-text">添加依赖</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#传统MyBatis使用方法"><span class="toc-number">3.</span> <span class="toc-text">传统MyBatis使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL"><span class="toc-number">3.1.</span> <span class="toc-text">SQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Entity"><span class="toc-number">3.2.</span> <span class="toc-text">Entity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dao"><span class="toc-number">3.3.</span> <span class="toc-text">Dao</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mapper"><span class="toc-number">3.4.</span> <span class="toc-text">mapper</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置扫描包"><span class="toc-number">3.5.</span> <span class="toc-text">设置扫描包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#application-properies"><span class="toc-number">3.6.</span> <span class="toc-text">application.properies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">3.7.</span> <span class="toc-text">测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tk-mybatis-mapper-用法"><span class="toc-number">4.</span> <span class="toc-text">tk.mybatis.mapper 用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#添加依赖-1"><span class="toc-number">4.1.</span> <span class="toc-text">添加依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#继承通用mapper"><span class="toc-number">4.2.</span> <span class="toc-text">继承通用mapper</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试-1"><span class="toc-number">4.3.</span> <span class="toc-text">测试</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Spring Boot整合MyBatis
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">wyb's blogs</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-06-08T12:23:08.000Z" itemprop="datePublished">2018-06-08</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/spring-boot/">spring boot</a>, <a class="tag-link" href="/tags/后端/">后端</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>新公司的新项目使用的是mybatis，以前的项目使用的是Hibernate，所以在网上找了一些关于Spring Boot和MyBatis组合的相关资料，总结后分享出来。</p>
+<p>ORM框架的本质是简化编程中操作数据库的编码，发展到现在基本上就剩两家了，一个是宣称可以不用写一句SQL的Hibernate，一个是可以灵活调试动态sql的MyBatis。两者各有特点，在企业级系统开发中可以根据需求灵活使用。</p>
+<h2 id="整合MyBatis"><a href="#整合MyBatis" class="headerlink" title="整合MyBatis"></a>整合MyBatis</h2><h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><p>新建一个项目，在<code>pom.xml</code>中引入依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">   &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;</span><br><span class="line">   &lt;version&gt;1.3.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">   &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>然后修改<code>application.properties</code>中配置mysql的连接配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">spring.datasource.url=jdbc:mysql://localhost:3306/test</span><br><span class="line">spring.datasource.username=root</span><br><span class="line">spring.datasource.password=123456</span><br><span class="line">spring.datasource.driver-class-name=com.mysql.jdbc.Driver</span><br></pre></td></tr></table></figure>
+<p>同其他Spring Boot工程一样，简单且简洁的的完成了基本配置，下面看看如何在这个基础下轻松方便的使用MyBatis访问数据库。</p>
+<h2 id="传统MyBatis使用方法"><a href="#传统MyBatis使用方法" class="headerlink" title="传统MyBatis使用方法"></a>传统MyBatis使用方法</h2><h3 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h3><p>在Mysql中创建user表，包含id(bigint)、name(varchar)、age(int)字段。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `user` (</span><br><span class="line">  `id` bigint(8) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `name` varchar(20) DEFAULT NULL,</span><br><span class="line">  `age` int(3) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Entity"><a href="#Entity" class="headerlink" title="Entity"></a>Entity</h3><p>然后我们再创建映射对象User。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">@Table(name = &quot;user&quot;)</span><br><span class="line">public class User &#123;</span><br><span class="line">    @Id</span><br><span class="line"> 	@Column(name = &quot;id&quot;)</span><br><span class="line">    private Long id;</span><br><span class="line">    @Column(name = &quot;name&quot;)</span><br><span class="line">    private String name;</span><br><span class="line">    @Column(name = &quot;age&quot;)</span><br><span class="line">    private int age;</span><br><span class="line"></span><br><span class="line">    public Long getId() &#123;</span><br><span class="line">        return id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setId(Long id) &#123;</span><br><span class="line">        this.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(int age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Dao"><a href="#Dao" class="headerlink" title="Dao"></a>Dao</h3><p>这里的ProductDao 是传统的mybatis的用法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Mapper </span><br><span class="line">public interface UserDao &#123;</span><br><span class="line">    List&lt;User&gt; getUsers();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="mapper"><a href="#mapper" class="headerlink" title="mapper"></a>mapper</h3><p>传统mybatis 我们必须有个xml 文件和Dao 对应起来, tk.maybatis.mapper无需此文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;mapper namespace=&quot;com.github.wz2cool.demo.tk.mybatis.mapper.ProductDao&quot;&gt;</span><br><span class="line">    &lt;select id=&quot;getProducts&quot; resultType=&quot;com.github.wz2cool.demo.tk.mybatis.model.entity.table.Product&quot;&gt;</span><br><span class="line">        SELECT * FROM product</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="设置扫描包"><a href="#设置扫描包" class="headerlink" title="设置扫描包"></a>设置扫描包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@SpringBootApplication </span><br><span class="line">@MapperScan(basePackages = &quot;mapper&quot;)</span><br><span class="line">public class SpringBootMybatisApplication &#123;</span><br><span class="line"></span><br><span class="line">   public static void main(String[] args) &#123;</span><br><span class="line">      SpringApplication.run(SpringBootMybatisApplication.class, args);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="application-properies"><a href="#application-properies" class="headerlink" title="application.properies"></a>application.properies</h3><p>注意这里的配置只是针对我们传统mybatis配置，对于tk.maybatis.mapper可以省略这里的配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mybatis.type-aliases-package=mapper</span><br><span class="line">mybatis.mapper-locations=classpath:mapper/*.xml</span><br></pre></td></tr></table></figure>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(SpringRunner.class)</span><br><span class="line">@SpringBootTest public class SpringBootMybatisApplicationTests &#123;</span><br><span class="line"></span><br><span class="line">	@Autowired</span><br><span class="line">	private UserDao userDao;</span><br><span class="line"></span><br><span class="line">	@Test</span><br><span class="line">	public void testSelect() throws Exception &#123;</span><br><span class="line">		List&lt;User&gt; userList = userDao.getUsers();</span><br><span class="line">		assertEquals(true, userList.size() &gt; 0);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过~这就是传统的mybatis的使用方法。那有没有更方便的呢？接下来我们了解下tk.mybatis.mapper。</p>
+<h2 id="tk-mybatis-mapper-用法"><a href="#tk-mybatis-mapper-用法" class="headerlink" title="tk.mybatis.mapper 用法"></a>tk.mybatis.mapper 用法</h2><h3 id="添加依赖-1"><a href="#添加依赖-1" class="headerlink" title="添加依赖"></a>添加依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">   &lt;groupId&gt;tk.mybatis&lt;/groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;mapper-spring-boot-starter&lt;/artifactId&gt;</span><br><span class="line">   &lt;version&gt;1.2.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--tk Mapper--&gt; </span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">   &lt;groupId&gt;tk.mybatis&lt;/groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;mapper&lt;/artifactId&gt;</span><br><span class="line">   &lt;version&gt;3.5.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="继承通用mapper"><a href="#继承通用mapper" class="headerlink" title="继承通用mapper"></a>继承通用mapper</h3><p>是的！你没有看错，没有xml文件！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public interface TkUserDao extends Mapper&lt;User&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(SpringRunner.class)</span><br><span class="line">@SpringBootTest public class TkMyBatisApplicationTests &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">	private TkUserDao tkUserDao;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">	public void selectAllTest() &#123;</span><br><span class="line">        List&lt;User&gt; userList = tkUserDao.selectAll();</span><br><span class="line">        assertEquals(true, userList.size() &gt; 0);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	@Test</span><br><span class="line">	public void insertTest() &#123;</span><br><span class="line">        User user = new User();</span><br><span class="line">        user.setAge(25);</span><br><span class="line">        user.setName(&quot;小李&quot;);</span><br><span class="line">        tkUserDao.insert(user);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试通过~通用mapper的基本用法就讲完了。</p>
+<p>如果大家想深入研究通用mapper，可以去访问GitHub仓库 <a href="https://github.com/abel533/Mapper" target="_blank" rel="noopener">abel533/Mapper</a>。</p>
+<p>希望本篇文章对您所有帮助~</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a href="https://github.com/wyb1992">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#整合MyBatis"><span class="toc-number">2.</span> <span class="toc-text">整合MyBatis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#添加依赖"><span class="toc-number">2.1.</span> <span class="toc-text">添加依赖</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#传统MyBatis使用方法"><span class="toc-number">3.</span> <span class="toc-text">传统MyBatis使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL"><span class="toc-number">3.1.</span> <span class="toc-text">SQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Entity"><span class="toc-number">3.2.</span> <span class="toc-text">Entity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dao"><span class="toc-number">3.3.</span> <span class="toc-text">Dao</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mapper"><span class="toc-number">3.4.</span> <span class="toc-text">mapper</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置扫描包"><span class="toc-number">3.5.</span> <span class="toc-text">设置扫描包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#application-properies"><span class="toc-number">3.6.</span> <span class="toc-text">application.properies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">3.7.</span> <span class="toc-text">测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tk-mybatis-mapper-用法"><span class="toc-number">4.</span> <span class="toc-text">tk.mybatis.mapper 用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#添加依赖-1"><span class="toc-number">4.1.</span> <span class="toc-text">添加依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#继承通用mapper"><span class="toc-number">4.2.</span> <span class="toc-text">继承通用mapper</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试-1"><span class="toc-number">4.3.</span> <span class="toc-text">测试</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&text=Spring Boot整合MyBatis"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&title=Spring Boot整合MyBatis"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&is_video=false&description=Spring Boot整合MyBatis"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Spring Boot整合MyBatis&body=Check out this article: https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&title=Spring Boot整合MyBatis"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&title=Spring Boot整合MyBatis"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&title=Spring Boot整合MyBatis"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&title=Spring Boot整合MyBatis"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://wyb1992.github.io/2018/06/08/Spring-Boot整合MyBatis/&name=Spring Boot整合MyBatis&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 wyb
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a href="https://github.com/wyb1992">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-120230928-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
